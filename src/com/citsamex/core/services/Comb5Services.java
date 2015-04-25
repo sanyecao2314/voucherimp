@@ -137,7 +137,10 @@ public class Comb5Services {
 			throw new Exception("该会计期间已结账,请重新选择月份!");
 		}
 		
-		String deptid = null;
+		//职员Id
+		String empid = null;
+		//部门Id
+		String deptId = null;
 		
 		for(int i = 0;i<list.size();i++){
 			String[] str = (String[]) list.get(i);
@@ -167,18 +170,28 @@ public class Comb5Services {
 				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
 			}
 			//检查第三个辅助核算项	职员
-			sql = "select * from t_item where fnumber = '059'";
+			sql = "select * from t_item where fnumber = '059' and FItemClassID=3 ";
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
-				deptid = ((HashMap)templist.get(0)).get("FItemID").toString();
+				empid = ((HashMap)templist.get(0)).get("FItemID").toString();
 			}else if(templist == null || templist.size() == 0){
 				throw new Exception("未找到编码包含059的辅助核算项目--职员!");
 			}else{
 				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
 			}
+			//第四个辅助核算项 部门
+			sql = "select * from t_item where fnumber = '04.001' and FItemClassID=2";
+			templist = DBUtil.querySql(sql);
+			if(templist != null && templist.size() == 1){
+				deptId = ((HashMap)templist.get(0)).get("FItemID").toString();
+			}else if(templist == null || templist.size() == 0){
+				throw new Exception("未找到编码包含04.001的辅助核算项目--部门!");
+			}else{
+				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
+			}
 			
-			//借方科目：管理费用/市场营销开支/销售手续费支出/直销手续费支出	2部门 3职员 8供应商 2039工程项目  --部门貌似要去掉
-			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F3="+deptid+" and F8=" + voucherEntryvo.getFxss() + "and F2039=" + voucherEntryvo.getProject();
+			//借方科目：管理费用/市场营销开支/销售手续费支出/直销手续费支出	2部门 3职员2039工程项目 
+			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2=" + deptId + " and F3=" + empid + "and F2039=" + voucherEntryvo.getProject();
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFJDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
@@ -186,13 +199,14 @@ public class Comb5Services {
 				//没有辅助核算信息.插入t_ItemDetail和t_ItemDetailV表辅助核算信息.
 				Object  maxFDetailID = DBUtil.querySqlUniqueResult("select max(FDetailID)+1 from t_ItemDetail ");
 				String insertItemDetail = "insert into t_ItemDetail(FDetailID,FDetailCount,F1,F2,F3,F4,F5,F8,F9,F10,F14,F2001,F2002,F2003,F2004,F2014,F2023,F2021,F2024,F2026,F2027,F2028,F2029,F2030,F2035,F2036,F2039,F2040,F2041) "
-					+ "values ("+maxFDetailID+",3,0,0,"+deptid+",0,0,"+voucherEntryvo.getFxss()+",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+voucherEntryvo.getProject()+",0,0)";
-				String insertItemDetailV = "insert into t_ItemDetailV(FDetailID,FItemClassID,FItemID) "
-					+ "values ("+maxFDetailID+",8,"+voucherEntryvo.getProject()+")";
+					+ "values ("+maxFDetailID+",3,0,"+deptId+","+empid+",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+voucherEntryvo.getProject()+",0,0)";
 				DBUtil.excuteUpdate(insertItemDetail);
+
+				String insertItemDetailV = "insert into t_ItemDetailV(FDetailID,FItemClassID,FItemID) "
+					+ "values ("+maxFDetailID+",2,"+deptId+")";
 				DBUtil.excuteUpdate(insertItemDetailV);
 				insertItemDetailV = "insert into t_ItemDetailV(FDetailID,FItemClassID,FItemID) "
-					+ "values ("+maxFDetailID+",3,"+deptid+")";
+					+ "values ("+maxFDetailID+",3,"+empid+")";
 				DBUtil.excuteUpdate(insertItemDetailV);
 				insertItemDetailV = "insert into t_ItemDetailV(FDetailID,FItemClassID,FItemID) "
 					+ "values ("+maxFDetailID+",2039,"+voucherEntryvo.getProject()+")";
@@ -266,7 +280,7 @@ public class Comb5Services {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.YEAR,Integer.parseInt(tempvo.getFYear()));
 			cal.set(Calendar.MONTH,Integer.parseInt(tempvo.getFPeriod()) - 1);
-			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH) - 1);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String dateStr = df.format(cal.getTime());
 			BigDecimal amount = new BigDecimal("0");

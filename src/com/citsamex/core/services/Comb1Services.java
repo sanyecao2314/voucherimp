@@ -221,7 +221,7 @@ public class Comb1Services {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.YEAR,Integer.parseInt(tempvo.getFYear()));
 			cal.set(Calendar.MONTH,Integer.parseInt(tempvo.getFPeriod()) - 1);
-			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH)-1);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String dateStr = df.format(cal.getTime());
 			BigDecimal amount = new BigDecimal("0");

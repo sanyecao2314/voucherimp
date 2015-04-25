@@ -74,8 +74,7 @@ public class Comb2Services {
 	}
 	/**
 	 * 转换文件
-	 * @param list 
-	 * 基金名称	合计	直销认购费	直销申购费	直销赎回费	直销转换费	直销补差费	直销销售服务费	公司认购费	公司申购费	公司赎回费	公司转换费	公司补差费	公司后端申购费
+	 * @param list   基金名称	合计	直销认购费	直销申购费	直销赎回费	直销转换费	直销补差费	直销销售服务费	公司认购费	公司申购费	公司赎回费	公司转换费	公司补差费	公司后端申购费
 	 * 直销认购费+公司认购费	应收账款/应收认购费	手续费及佣金收入/基金销售手续费收入/认购费-前端
 	 * 直销申购费+公司申购费	应收账款/应收申购费	手续费及佣金收入/基金销售手续费收入/申购费-前端
 	 * 直销赎回费+公司赎回费	应收账款/应收赎回费	手续费及佣金收入/基金销售手续费收入/赎回费
@@ -159,6 +158,15 @@ public class Comb2Services {
 			throw new Exception("该会计期间已结账,请重新选择月份!");
 		}
 		
+		String specialAccountStr = "select FAccountID from t_Account where FNumber='6022.02'";
+		String specialAccountId = null;
+		templist = DBUtil.querySql(specialAccountStr);
+		if(templist != null && templist.size() == 1){
+			specialAccountId = ((HashMap)templist.get(0)).get("FAccountID").toString();
+		}else{
+			throw new Exception("查询贷方科目异常.请执行sql:" + specialAccountStr);
+		}
+		
 		for(int i = 0;i<list.size();i++){
 			String[] str = (String[]) list.get(i);
 			VoucherEntryVO voucherEntryvo = getVoucher1(str);
@@ -218,7 +226,15 @@ public class Comb2Services {
 				voucherEntryvo.setFPreparerID(userid);
 				voucherEntryvo.setFExplanation("计提" + month + "月手续费收入");
 				voucherEntryvo.setJAccountID(jaccsubjid[5]);
-				voucherEntryvo.setDAccountID(daccsubjid[5]);
+
+				String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+				templist = DBUtil.querySql(sql);
+				//01开头的是基金,02开头的是专户,没有其他!
+				if (((HashMap)templist.get(0)).get("FNumber").toString().startsWith("01")) {
+					voucherEntryvo.setDAccountID(daccsubjid[5]);
+				} else {
+					voucherEntryvo.setDAccountID(specialAccountId);
+				}
 				voList.add(voucherEntryvo);
 			}
 		}
@@ -242,7 +258,7 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "'";
+		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
 		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
@@ -289,7 +305,7 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "'";
+		String sql = "select * from t_item where  fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
 		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
@@ -335,7 +351,7 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "'";
+		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
 		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
@@ -384,7 +400,7 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "'";
+		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
 		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
@@ -430,7 +446,7 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "'";
+		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
 		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
@@ -476,7 +492,7 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "'";
+		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
 		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
@@ -538,7 +554,7 @@ public class Comb2Services {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.YEAR,Integer.parseInt(tempvo.getFYear()));
 			cal.set(Calendar.MONTH,Integer.parseInt(tempvo.getFPeriod()) - 1);
-			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH) - 1);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String dateStr = df.format(cal.getTime());
 			BigDecimal amount = new BigDecimal("0");
