@@ -79,6 +79,12 @@ public class DBUtil {
         return list;
     }
     
+    /**
+     * 只有一个返回值的查询
+     * @param sql
+     * @return
+     * @throws Exception
+     */
     public static Object querySqlUniqueResult(String sql) throws Exception {
     	Connection conn = null;
         Statement stat = null;
