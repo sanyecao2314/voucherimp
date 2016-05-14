@@ -21,6 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.citsamex.core.startup.MainStart;
 import com.citsamex.core.util.DBUtil;
+import com.citsamex.core.util.DateUtil;
 import com.citsamex.core.util.ExcelUtil;
 import com.citsamex.core.vo.VoucherEntryVO;
 
@@ -29,7 +30,7 @@ import com.citsamex.core.vo.VoucherEntryVO;
  * @author fans.fan
  *
  */
-public class Comb4Services {
+public class Comb4Services extends SuperServices {
 	
 	public static ArrayList readXls(File file){
 		
@@ -71,7 +72,6 @@ public class Comb4Services {
 				voList.add(vo);
 			}
 		} catch (Exception e) {
-			System.out.println();
 			e.printStackTrace();
 		}
 		return voList;
@@ -92,53 +92,14 @@ public class Comb4Services {
 		
 		List<VoucherEntryVO> voList = new ArrayList<VoucherEntryVO>();
 		List templist = null;
-		String jaccsubjid = null;
-		String daccsubjid = null;
-		String userid = null;
-		
-		templist = DBUtil.querySql("select FAccountID from t_Account where FNumber='6602.02.07'");
-		if(templist != null && templist.size() == 1){
-			jaccsubjid = ((HashMap)templist.get(0)).get("FAccountID").toString();
-		}else{
-			throw new Exception("查询借方科目异常.请执行sql:select FAccountID from t_Account where FNumber='6602.02.07''");
-		}
-		
-		templist = DBUtil.querySql("select FAccountID from t_Account where FNumber='2202.01'");
-		if(templist != null && templist.size() == 1){
-			daccsubjid = ((HashMap)templist.get(0)).get("FAccountID").toString();
-		}else{
-			throw new Exception("查询贷方科目异常.请执行sql:select FAccountID from t_Account where FNumber='2202.01''");
-		}
-		
-		//校验用户名称
-		String username = mainUI.usernameTextField.getText();
-		if(username == null || "".equals(username)){
-			throw new Exception("请填写用户名!");
-		}
-		
-		templist = DBUtil.querySql("select * from t_user where FName='"+username+"'");
-		if(templist != null && templist.size() == 1){
-			userid = ((HashMap)templist.get(0)).get("FUserID").toString();
-		}else{
-			throw new Exception("未查到相关用户信息,请检查用户名是否正确!");
-		}
+		String jaccsubjid = getAccsubjid("6602.02.07");
+		String daccsubjid = getAccsubjid("2202.01");
+		String userid = getUserId(mainUI.usernameTextField.getText());
 		
 		//校验业务期间.
 		int year = Integer.parseInt(mainUI.yearComboBox.getSelectedItem().toString());
 		int month = Integer.parseInt(mainUI.monthComboBox.getSelectedItem().toString());
-		
-		String yearSql = "select FValue from t_systemprofile where FKey='currentyear' and FCategory='FA'";
-		templist = DBUtil.querySql(yearSql);
-		int sysyear = Integer.parseInt(((HashMap)templist.get(0)).get("FValue").toString());
-		if(year < sysyear){
-			throw new Exception("该财年已结账,请重新选择年份!");
-		}
-		String monthSql = "select FValue from t_systemprofile where FKey='currentperiod' and FCategory='FA'";
-		templist = DBUtil.querySql(monthSql);
-		int sysmonth = Integer.parseInt(((HashMap)templist.get(0)).get("FValue").toString());
-		if(month < sysmonth){
-			throw new Exception("该会计期间已结账,请重新选择月份!");
-		}
+		checkYearAndMonth(year, month);
 		
 		String deptid = null;
 		
@@ -148,35 +109,14 @@ public class Comb4Services {
 			
 			VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
 			//检查第一个辅助核算项	销售商			
-			String sql = "select * from t_item where FItemClassID=8 and fnumber like '%" + str[0] + "' and fname like '%"+str[1]+"%' ";
-			templist = DBUtil.querySql(sql);
-			if(templist != null && templist.size() == 1){
-				voucherEntryvo.setFxss(((HashMap)templist.get(0)).get("FItemID").toString());
-			}else if(templist == null || templist.size() == 0){
-				throw new Exception("未找到编码包含" + str[1] + "的辅助核算项目!");
-			}else{
-				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-			}
+			String sql = "select FItemID from t_item where FItemClassID=8 and fnumber like '%" + str[0] + "' and fname like '%"+str[1]+"%' ";
+			voucherEntryvo.setFxss(getFItemID(sql, str[0]));
 			//检查第二个辅助核算项	基金代码
-			sql = "select * from t_item where fnumber like '%" + str[2] + "'";
-			templist = DBUtil.querySql(sql);
-			if(templist != null && templist.size() == 1){
-				voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-			}else if(templist == null || templist.size() == 0){
-				throw new Exception("未找到编码包含" + str[2] + "的辅助核算项目!");
-			}else{
-				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-			}
+			sql = "select FItemID from t_item where fnumber like '%" + str[2] + "'";
+			voucherEntryvo.setProject(getFItemID(sql, str[2]));
 			//检查第三个辅助核算项	部门
-			sql = "select * from t_item where fnumber = '04.001' and FItemClassID=2";
-			templist = DBUtil.querySql(sql);
-			if(templist != null && templist.size() == 1){
-				deptid = ((HashMap)templist.get(0)).get("FItemID").toString();
-			}else if(templist == null || templist.size() == 0){
-				throw new Exception("未找到编码包含04.001的辅助核算项目--部门!");
-			}else{
-				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-			}
+			sql = "select FItemID from t_item where fnumber = '04.001' and FItemClassID=2";
+			deptid = getFItemID(sql, "04.001");
 			
 			//借方科目：管理费用/市场营销开支/尾随佣金		F2部门/F8供应商/F2039工程项目
 			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2="+deptid+" and F8=" + voucherEntryvo.getFxss() + "and F2039=" + voucherEntryvo.getProject();
@@ -265,12 +205,6 @@ public class Comb4Services {
 			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+tempvo.getFYear()+" and FPeriod="+tempvo.getFPeriod());
 			int fnumber = Integer.parseInt(obj == null ? "1":obj.toString());
 			
-			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.YEAR,Integer.parseInt(tempvo.getFYear()));
-			cal.set(Calendar.MONTH,Integer.parseInt(tempvo.getFPeriod()) - 1);
-			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH) - 1);
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			String dateStr = df.format(cal.getTime());
 			BigDecimal amount = new BigDecimal("0");
 			for (int i = 0; i < volist.size(); i++) {
 				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
@@ -283,7 +217,8 @@ public class Comb4Services {
 				stat.execute(jvoucherentrySql);
 				stat.execute(dvoucherentrySql);
 			}
-
+			
+			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
 			voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
 				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'" + tempvo.getFExplanation() + "',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null," + fnumber + ",0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 			stat.execute(voucherSql);

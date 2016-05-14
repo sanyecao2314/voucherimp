@@ -21,6 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.citsamex.core.startup.MainStart;
 import com.citsamex.core.util.DBUtil;
+import com.citsamex.core.util.DateUtil;
 import com.citsamex.core.util.ExcelUtil;
 import com.citsamex.core.vo.VoucherEntryVO;
 
@@ -29,7 +30,7 @@ import com.citsamex.core.vo.VoucherEntryVO;
  * @author fans.fan
  *
  */
-public class Comb2Services {
+public class Comb2Services extends SuperServices{
 	
 	public static ArrayList readXls(File file){
 		
@@ -86,7 +87,7 @@ public class Comb2Services {
 		List templist = null;
 		String[] jaccsubjid = new String[6];
 		String[] daccsubjid = new String[6];
-		String userid = null;
+		String userid = getUserId(mainUI.usernameTextField.getText());
 		
 		//借方科目检查
 		String[] jsqls = new String[]{"select FAccountID from t_Account where FNumber='1122.02'",
@@ -122,44 +123,12 @@ public class Comb2Services {
 			}
 		}
 		
-		//校验用户名称
-		String username = mainUI.usernameTextField.getText();
-		if(username == null || "".equals(username)){
-			throw new Exception("请填写用户名!");
-		}
-		
-		templist = DBUtil.querySql("select * from t_user where FName='"+username+"'");
-		if(templist != null && templist.size() == 1){
-			userid = ((HashMap)templist.get(0)).get("FUserID").toString();
-		}else{
-			throw new Exception("未查到相关用户信息,请检查用户名是否正确!");
-		}
-		
 		//校验业务期间.
 		int year = Integer.parseInt(mainUI.yearComboBox.getSelectedItem().toString());
 		int month = Integer.parseInt(mainUI.monthComboBox.getSelectedItem().toString());
+		checkYearAndMonth(year, month);
 		
-		String yearSql = "select FValue from t_systemprofile where FKey='currentyear' and FCategory='FA'";
-		templist = DBUtil.querySql(yearSql);
-		int sysyear = Integer.parseInt(((HashMap)templist.get(0)).get("FValue").toString());
-		if(year < sysyear){
-			throw new Exception("该财年已结账,请重新选择年份!");
-		}
-		String monthSql = "select FValue from t_systemprofile where FKey='currentperiod' and FCategory='FA'";
-		templist = DBUtil.querySql(monthSql);
-		int sysmonth = Integer.parseInt(((HashMap)templist.get(0)).get("FValue").toString());
-		if(month < sysmonth){
-			throw new Exception("该会计期间已结账,请重新选择月份!");
-		}
-		
-		String specialAccountStr = "select FAccountID from t_Account where FNumber='6022.02'";
-		String specialAccountId = null;
-		templist = DBUtil.querySql(specialAccountStr);
-		if(templist != null && templist.size() == 1){
-			specialAccountId = ((HashMap)templist.get(0)).get("FAccountID").toString();
-		}else{
-			throw new Exception("查询贷方科目异常.请执行sql:" + specialAccountStr);
-		}
+		String specialAccountId = getAccsubjid("6022.02");
 		
 		for(int i = 0;i<list.size();i++){
 			String[] str = (String[]) list.get(i);
@@ -252,17 +221,11 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
-		List templist = DBUtil.querySql(sql);
-		if(templist != null && templist.size() == 1){
-			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + str[0] + "的辅助核算项目!");
-		}else{
-			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-		}
+		String sql = "select FItemID from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+		voucherEntryvo.setProject(getFItemID(sql, str[0].split("-")[0]));
+		
 		sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2039=" + voucherEntryvo.getProject();
-		templist = DBUtil.querySql(sql);
+		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 		}else if(templist == null || templist.size() == 0){
@@ -299,17 +262,11 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where  fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
-		List templist = DBUtil.querySql(sql);
-		if(templist != null && templist.size() == 1){
-			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + str[0] + "的辅助核算项目!");
-		}else{
-			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-		}
+		String sql = "select FItemID from t_item where  fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+		voucherEntryvo.setProject(getFItemID(sql, str[0].split("-")[0]));
+
 		sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2039=" + voucherEntryvo.getProject();
-		templist = DBUtil.querySql(sql);
+		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 		}else if(templist == null || templist.size() == 0){
@@ -345,17 +302,11 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
-		List templist = DBUtil.querySql(sql);
-		if(templist != null && templist.size() == 1){
-			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + str[0] + "的辅助核算项目!");
-		}else{
-			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-		}
+		String sql = "select FItemID from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+		voucherEntryvo.setProject(getFItemID(sql, str[0].split("-")[0]));
+
 		sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2039=" + voucherEntryvo.getProject();
-		templist = DBUtil.querySql(sql);
+		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 		}else if(templist == null || templist.size() == 0){
@@ -394,17 +345,11 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
-		List templist = DBUtil.querySql(sql);
-		if(templist != null && templist.size() == 1){
-			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + str[0] + "的辅助核算项目!");
-		}else{
-			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-		}
+		String sql = "select FItemID from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+		voucherEntryvo.setProject(getFItemID(sql, str[0].split("-")[0]));
+
 		sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2039=" + voucherEntryvo.getProject();
-		templist = DBUtil.querySql(sql);
+		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 		}else if(templist == null || templist.size() == 0){
@@ -440,17 +385,11 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
-		List templist = DBUtil.querySql(sql);
-		if(templist != null && templist.size() == 1){
-			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + str[0] + "的辅助核算项目!");
-		}else{
-			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-		}
+		String sql = "select FItemID from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+		voucherEntryvo.setProject(getFItemID(sql, str[0].split("-")[0]));
+		
 		sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2039=" + voucherEntryvo.getProject();
-		templist = DBUtil.querySql(sql);
+		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 		}else if(templist == null || templist.size() == 0){
@@ -486,17 +425,11 @@ public class Comb2Services {
 			return null;
 		}
 		VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-		String sql = "select * from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
-		List templist = DBUtil.querySql(sql);
-		if(templist != null && templist.size() == 1){
-			voucherEntryvo.setProject(((HashMap)templist.get(0)).get("FItemID").toString());
-		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + str[0] + "的辅助核算项目!");
-		}else{
-			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
-		}
+		String sql = "select FItemID from t_item where fnumber like '%" + str[0].split("-")[0] + "' and FItemClassID=2039";
+		voucherEntryvo.setProject(getFItemID(sql, str[0].split("-")[0]));
+
 		sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2039=" + voucherEntryvo.getProject();
-		templist = DBUtil.querySql(sql);
+		List templist = DBUtil.querySql(sql);
 		if(templist != null && templist.size() == 1){
 			voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 		}else if(templist == null || templist.size() == 0){
@@ -546,12 +479,6 @@ public class Comb2Services {
 			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+tempvo.getFYear()+" and FPeriod="+tempvo.getFPeriod());
 			int fnumber = Integer.parseInt(obj == null ? "1":obj.toString());
 			
-			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.YEAR,Integer.parseInt(tempvo.getFYear()));
-			cal.set(Calendar.MONTH,Integer.parseInt(tempvo.getFPeriod()) - 1);
-			cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH) - 1);
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			String dateStr = df.format(cal.getTime());
 			BigDecimal amount = new BigDecimal("0");
 			for (int i = 0; i < volist.size(); i++) {
 				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
@@ -569,6 +496,7 @@ public class Comb2Services {
 				stat.execute(dvoucherentrySql2);
 			}
 
+			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
 			voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
 				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'计提" + tempvo.getFPeriod() + "月手续费收入',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null," + fnumber + ",0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 			stat.execute(voucherSql);
@@ -598,7 +526,7 @@ public class Comb2Services {
 		if(templist != null && templist.size() == 1){
 			daccsubjid = ((HashMap)templist.get(0)).get("FAccountID").toString();
 		}else{
-			throw new Exception("查询借方科目异常.请执行sql:select FAccountID from t_Account where FNumber='1122.01'");
+			throw new Exception("查询借方科目异常.请执行sql:select FAccountID from t_Account where FNumber='2221.04.02'");
 		}
 		return daccsubjid;
 	}
