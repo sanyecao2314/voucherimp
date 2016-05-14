@@ -236,7 +236,8 @@ public class Comb5Services {
 			voucherEntryvo.setFExplanation("计提" + month + "月直销手续费");
 			voucherEntryvo.setJAccountID(jaccsubjid);
 			voucherEntryvo.setDAccountID(daccsubjid);
-			voucherEntryvo.setFAmount(str[9]);
+			//str[9]传入的是价税合计,系统要是的不含税价格 不含税价格=价税合计/1.06*0.06
+			voucherEntryvo.setFAmount(new BigDecimal(str[9]).subtract(new BigDecimal(str[9]).divide(new BigDecimal(1.06), 2, 4).multiply(new BigDecimal(0.06))).setScale(2, 4).toString());
 			voList.add(voucherEntryvo);
 		}
 		

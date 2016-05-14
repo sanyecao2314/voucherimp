@@ -65,9 +65,6 @@ public class Comb3Services {
 				vo[4] = ExcelUtil.getCellValue(row.getCell(21));
 				vo[5] = ExcelUtil.getCellValue(row.getCell(27));
 				vo[6] = ExcelUtil.getCellValue(row.getCell(32));
-//				for (int j = 4; j < 4+vo.length; j++) {
-//					vo[j-4] = ExcelUtil.getCellValue(row.getCell(j));
-//				}
 				voList.add(vo);
 			}
 		} catch (Exception e) {
@@ -83,12 +80,12 @@ public class Comb3Services {
 	 * @return
 	 * @throws Exception 
 	 */
-	public List convertFile2VO(ArrayList list,MainStart mainUI) throws Exception{
+	public List<VoucherEntryVO> convertFile2VO(ArrayList<String[]> list,MainStart mainUI) throws Exception{
 		if(list == null || list.size() == 0){
 			return null;
 		}
 		
-		List voList = new ArrayList();
+		List<VoucherEntryVO> voList = new ArrayList<VoucherEntryVO>();
 		List templist = null;
 		String jaccsubjid = null;
 		String daccsubjid = null;
@@ -140,8 +137,7 @@ public class Comb3Services {
 		
 		String deptid = null;
 		
-		for(int i = 0;i<list.size();i++){
-			String[] str = (String[]) list.get(i);
+		for(String[] str : list){
 			if(str[6]==null || "".equals(str[6]))continue;
 			if(Double.parseDouble(str[6].replaceAll(",", "")) == 0.0d) continue;
 			
@@ -227,7 +223,8 @@ public class Comb3Services {
 			voucherEntryvo.setFExplanation("计提" + month + "月尾随佣金");
 			voucherEntryvo.setJAccountID(jaccsubjid);
 			voucherEntryvo.setDAccountID(daccsubjid);
-			voucherEntryvo.setFAmount(str[6]);
+			//str[6]传入的是价税合计,系统要是的不含税价格 不含税价格=价税合计/1.06*0.06
+			voucherEntryvo.setFAmount(new BigDecimal(str[6]).subtract(new BigDecimal(str[6]).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4)).toString());
 			voList.add(voucherEntryvo);
 		}
 		

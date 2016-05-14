@@ -554,11 +554,14 @@ public class Comb2Services {
 			BigDecimal amount = new BigDecimal("0");
 			for (int i = 0; i < volist.size(); i++) {
 				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
-				
+				BigDecimal taxAmount = new BigDecimal(vevo.getFAmount()).multiply(new BigDecimal(0.06).divide(new BigDecimal(1.06), 2, 4));
+				BigDecimal tempAmount = new BigDecimal(vevo.getFAmount()).subtract(taxAmount);
 				jvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+i*2+",'计提" + vevo.getFPeriod() + "月手续费收入'," + vevo.getJAccountID() + "," + vevo.getFDetailID() + ",1,1,1," + vevo.getFAmount() + "," + vevo.getFAmount() + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*2+1)+")";
+					+ "values(0," + FVoucherID + ","+i*3+",'计提" + vevo.getFPeriod() + "月手续费收入'," + vevo.getJAccountID() + "," + vevo.getFDetailID() + ",1,1,1," + vevo.getFAmount() + "," + vevo.getFAmount() + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+1)+")";
 				dvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+(i*2+1)+",'计提" + vevo.getFPeriod() + "月手续费收入'," + vevo.getDAccountID() + "," + vevo.getFDetailID() + ",1,1,0," + vevo.getFAmount() + "," + vevo.getFAmount() + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*2+")";
+					+ "values(0," + FVoucherID + ","+(i*3+1)+",'计提" + vevo.getFPeriod() + "月手续费收入'," + getFAccountID() + ",0,1,1,0," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*3+");";
+				dvoucherentrySql = dvoucherentrySql + "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
+						+ "values(0," + FVoucherID + ","+(i*3+2)+",'计提" + vevo.getFPeriod() + "月手续费收入'," + vevo.getDAccountID() + "," + vevo.getFDetailID() + ",1,1,0," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*3+");";
 				amount = amount.add(new BigDecimal(vevo.getFAmount()));
 				stat.execute(jvoucherentrySql);
 				stat.execute(dvoucherentrySql);
@@ -596,6 +599,18 @@ public class Comb2Services {
 		
 		
 		return 0;
+	}
+	
+	private String getFAccountID() throws Exception{
+		String daccsubjid = "";
+		//  应付税金-应交增值税-销项税
+		List templist = DBUtil.querySql("select FAccountID from t_Account where FNumber='2221.04.02'");
+		if(templist != null && templist.size() == 1){
+			daccsubjid = ((HashMap)templist.get(0)).get("FAccountID").toString();
+		}else{
+			throw new Exception("查询借方科目异常.请执行sql:select FAccountID from t_Account where FNumber='1122.01'");
+		}
+		return daccsubjid;
 	}
 
 }
