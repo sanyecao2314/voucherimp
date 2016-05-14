@@ -306,20 +306,8 @@ public class Comb5Services {
 			e.printStackTrace();
 			throw e;
 		}finally{
-            if (stat != null) {
-                try {
-                    stat.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+			DBUtil.close(stat);
+			DBUtil.close(conn);
 		}
 		return 0;
 	}

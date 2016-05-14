@@ -48,32 +48,9 @@ public class DBUtil {
                 list.add(row);
             }
         } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            
-            if (stat != null) {
-                try {
-                    stat.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
+        	close(rs);
+        	close(stat);
+        	close(conn);
         }
         
         return list;
@@ -94,51 +71,23 @@ public class DBUtil {
         	conn = ds.getConnection();
             stat = conn.createStatement();
             rs = stat.executeQuery(sql);
-            ResultSetMetaData meta = rs.getMetaData();
-            int cols = meta.getColumnCount();
             while (rs.next()) {
             	obj =rs.getObject(1);
             }
         } finally {
-        	releaseDbResource(conn, stat, rs);
+        	close(conn);
+        	close(stat);
+        	close(rs);
         }
         
         return obj;
     }
     
-    public static void releaseDbResource(Connection conn, Statement stat, ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        if (stat != null) {
-            try {
-                stat.close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     
     public static void excuteUpdate(String sql) throws Exception {
-        InvDataSource ds = new InvDataSource(); 
         Connection conn = null;
         Statement stat = null;
         try {
-
             conn = ds.getConnection();
             stat = conn.createStatement();
             Logger.getRootLogger().info("sql excute: " + sql);
@@ -147,28 +96,12 @@ public class DBUtil {
             e.printStackTrace();
             throw e;
         } finally {
-            if (stat != null) {
-                try {
-                    stat.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
+           close(stat);
+           close(conn);
         }
     }
     
     public static Connection getConnection() {
-        InvDataSource ds = new InvDataSource();
         Connection conn = null;
         try {
             conn = ds.getConnection();
@@ -178,6 +111,21 @@ public class DBUtil {
         }
         
         return conn;
+    }
+    
+    
+    /**
+     * πÿ±’¡¨Ω”
+     * @param closeable
+     */
+    public static void close(AutoCloseable closeable){
+    	if (closeable != null) {
+			try {
+				closeable.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
     }
     
     
