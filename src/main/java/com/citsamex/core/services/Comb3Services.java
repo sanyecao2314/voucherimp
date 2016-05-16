@@ -169,7 +169,9 @@ public class Comb3Services extends SuperServices{
 			voucherEntryvo.setFAmount(new BigDecimal(str[6]).subtract(new BigDecimal(str[6]).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4)).toString());
 			voList.add(voucherEntryvo);
 		}
-		
+		if (voList == null || voList.isEmpty()) {
+			mainUI.remark.setText("没有需要导入的数据.");
+		}
 		return voList;
 	}
 	

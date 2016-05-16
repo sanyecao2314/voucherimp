@@ -170,8 +170,8 @@ public class Comb5Services extends SuperServices {
 			voucherEntryvo.setFExplanation("计提" + month + "月直销手续费");
 			voucherEntryvo.setJAccountID(jaccsubjid);
 			voucherEntryvo.setDAccountID(daccsubjid);
-			//str[9]传入的是价税合计,系统要是的不含税价格 不含税价格=价税合计/1.06*0.06
-			voucherEntryvo.setFAmount(new BigDecimal(str[9]).subtract(new BigDecimal(str[9]).divide(new BigDecimal(1.06), 2, 4).multiply(new BigDecimal(0.06))).setScale(2, 4).toString());
+			//str[9]传入的是价税合计
+			voucherEntryvo.setFAmount(str[9]);
 			voList.add(voucherEntryvo);
 		}
 		
@@ -197,7 +197,8 @@ public class Comb5Services extends SuperServices {
 			stat = conn.createStatement();
 			
 			String voucherSql = null;
-			String jvoucherentrySql = null;
+			String jvoucherentrySql1 = null;
+			String jvoucherentrySql2 = null;
 			String dvoucherentrySql = null;
 			
 			//凭证ID.
@@ -211,12 +212,17 @@ public class Comb5Services extends SuperServices {
 			for (int i = 0; i < volist.size(); i++) {
 				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
 				String tempAmount = vevo.getFAmount().replaceAll(",","");
-				jvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+i*2+",'" + vevo.getFExplanation() + "'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*2+1)+")";
+				BigDecimal taxAmount = new BigDecimal(tempAmount).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4);
+				BigDecimal tempAmount2 = new BigDecimal(tempAmount).subtract(taxAmount);
+				jvoucherentrySql1 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
+					+ "values(0," + FVoucherID + ","+i*3+",'" + vevo.getFExplanation() + "'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+2)+")";
+				jvoucherentrySql2 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
+						+ "values(0," + FVoucherID + ","+(i*3+1)+",'" + vevo.getFExplanation() + "'," + getFAccountID() + ",0,1,1,1," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+2)+")";
 				dvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+(i*2+1)+",'" + vevo.getFExplanation() + "'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*2+")";
+					+ "values(0," + FVoucherID + ","+(i*3+2)+",'" + vevo.getFExplanation() + "'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*3+")";
 				amount = amount.add(new BigDecimal(tempAmount));
-				stat.execute(jvoucherentrySql);
+				stat.execute(jvoucherentrySql1);
+				stat.execute(jvoucherentrySql2);
 				stat.execute(dvoucherentrySql);
 			}
 
@@ -241,4 +247,9 @@ public class Comb5Services extends SuperServices {
 		return 0;
 	}
 
+	private String getFAccountID() throws Exception{
+		//  进项税
+		return getAccsubjid("2221.04.01");
+	}
+	
 }

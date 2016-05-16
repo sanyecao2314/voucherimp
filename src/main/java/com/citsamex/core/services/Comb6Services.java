@@ -202,7 +202,7 @@ public class Comb6Services extends SuperServices {
 			for (int i = 0; i < volist.size(); i++) {
 				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
 				String tempAmount = vevo.getFAmount().replaceAll(",","");
-				BigDecimal taxAmount = new BigDecimal(tempAmount).multiply(new BigDecimal(0.06).divide(new BigDecimal(1.06), 2, 4));
+				BigDecimal taxAmount = new BigDecimal(tempAmount).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4);
 				BigDecimal tempAmount2 = new BigDecimal(tempAmount).subtract(taxAmount);
 				jvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
 					+ "values(0," + FVoucherID + ","+i*3+",'"+vevo.getFExplanation()+"'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+1)+")";

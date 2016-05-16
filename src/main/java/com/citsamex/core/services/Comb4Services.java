@@ -173,6 +173,9 @@ public class Comb4Services extends SuperServices {
 			voList.add(voucherEntryvo);
 		}
 		
+		if (voList == null || voList.isEmpty()) {
+			mainUI.remark.setText("没有需要导入的数据.");
+		}
 		return voList;
 	}
 	
@@ -184,7 +187,9 @@ public class Comb4Services extends SuperServices {
 	 */
 	public int impVO2SysVoucher(List volist,MainStart mainUI) throws Exception{
 		
-		if(volist == null || volist.size() == 0){return 0;}
+		if(volist == null || volist.size() == 0){
+			return 0;
+		}
 		
 		Connection conn = null;
 		Statement stat = null;

@@ -173,6 +173,7 @@ public class MainStart extends AbstractStart {
 	 */
 	private boolean onBOConvertButton() {
 		if(list == null || list.size() == 0){
+			remark.setText("没有需要导入的数据.");
 			return false;
 		}
 		
