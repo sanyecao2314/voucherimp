@@ -166,7 +166,7 @@ public class Comb3Services extends SuperServices{
 			voucherEntryvo.setJAccountID(jaccsubjid);
 			voucherEntryvo.setDAccountID(daccsubjid);
 			//str[6]传入的是价税合计,系统要是的不含税价格 不含税价格=价税合计/1.06*0.06
-			voucherEntryvo.setFAmount(new BigDecimal(str[6]).subtract(new BigDecimal(str[6]).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4)).toString());
+			voucherEntryvo.setFAmount(new BigDecimal(str[6].replaceAll(",","")).subtract(new BigDecimal(str[6].replaceAll(",","")).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4)).toString());
 			voList.add(voucherEntryvo);
 		}
 		if (voList == null || voList.isEmpty()) {
