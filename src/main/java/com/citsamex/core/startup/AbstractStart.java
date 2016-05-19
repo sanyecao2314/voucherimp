@@ -57,6 +57,8 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	protected final static String COMBOVALUE4 = "尾随佣金汇总表_比例";
 	protected final static String COMBOVALUE5 = "直销手续费明细";
 	protected final static String COMBOVALUE6 = "专户基金费用表";
+	protected final static String COMBOVALUE7 = "公司管理费及业绩报酬划拨明细表";
+	protected final static String COMBOVALUE8 = "公司销售服务费划拨明细表";
 	
 	/**
 	 * namemap
@@ -114,7 +116,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 					chooseButton = new JButton();
 					jPanel1.add(chooseButton);
 					chooseButton.setText("选择文件");
-					chooseButton.setBounds(131, 5, 104, 23);
+					chooseButton.setBounds(231, 5, 104, 23);
 					chooseButton
 							.setToolTipText("\u9009\u62e9\u8981\u5145\u503c\u7684excel\u6587\u4ef6");
 					chooseButton.addActionListener(this);
@@ -122,10 +124,10 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 				{
 					ComboBoxModel jComboBox1Model = 
 						new DefaultComboBoxModel(
-								new String[] { COMBOVALUE1, COMBOVALUE2, COMBOVALUE3, COMBOVALUE4, COMBOVALUE5, COMBOVALUE6 });
+								new String[] { COMBOVALUE7, COMBOVALUE8 });
 					jComboBox = new JComboBox();
 					jComboBox.setModel(jComboBox1Model);
-					jComboBox.setBounds(6, 4, 108, 24);
+					jComboBox.setBounds(6, 4, 208, 24);
 					jComboBox.addActionListener(this);
 					jPanel1.add(jComboBox);
 				}
@@ -133,7 +135,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 					impButton = new JButton();
 					jPanel1.add(impButton);
 					impButton.setText("导入");
-					impButton.setBounds(345, 7, 84, 21);
+					impButton.setBounds(445, 7, 84, 21);
 					impButton.setToolTipText("\u5c06\u9009\u62e9\u7684Excel\u6587\u4ef6\u6570\u636e\u8bfb\u53d6\u5230\u754c\u9762");
 					impButton.addActionListener(this);
 				}
@@ -149,38 +151,6 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 					usernameTextField.setText("username");
 					usernameTextField.setBounds(742, 7, 63, 21);
 				}
-				{
-					dateLabel = new JLabel();
-					jPanel1.add(dateLabel);
-					dateLabel.setText("\u671f\u95f4:");
-					dateLabel.setBounds(819, 7, 35, 21);
-				}
-				{
-					Calendar cal = Calendar.getInstance();
-					int currYear = cal.get(Calendar.YEAR);
-					
-					ComboBoxModel yearComboBoxModel = 
-						new DefaultComboBoxModel(
-								new String[] { String.valueOf(currYear - 1),String.valueOf(currYear), String.valueOf(currYear + 1) });
-					yearComboBox = new JComboBox();
-					jPanel1.add(yearComboBox);
-					yearComboBox.setModel(yearComboBoxModel);
-					yearComboBox.setBounds(854, 7, 56, 21);
-				}
-				{
-					ComboBoxModel monthComboBoxModel = 
-						new DefaultComboBoxModel(
-								new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" });
-					monthComboBox = new JComboBox();
-					jPanel1.add(monthComboBox);
-					monthComboBox.setModel(monthComboBoxModel);
-					monthComboBox.setBounds(938, 7, 42, 21);
-				}
-				{
-//					kdDatePicker = new KDDatePicker();
-//					jPanel1.add(kdDatePicker);
-//					kdDatePicker.setBounds(868, 7, 91, 21);
-				}
 
 			}
 
@@ -195,7 +165,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	protected void initData() {
 		//设置默认的tablemodel.
 		
-		defaultTableModel = new TableModel1();
+		defaultTableModel = new TableModel7();
 		dataTable.setModel(defaultTableModel);
 		dataTable.getTableHeader().setBounds(0, 0, 984, 0);
 	}
@@ -344,6 +314,21 @@ class TableModel5 extends DefaultTableModel{
 class TableModel6 extends DefaultTableModel{
 	static Object[] columnnames = new Object[]{"日期","基金代码","基金名称","部门","职员","管理费汇总","托管费","销售费用"};
 	public TableModel6(){
+		super(columnnames,0);
+	}
+}
+//入账时间	项目代码	项目名称	期数	项目团队	职员	项目性质	管理费	业绩报酬
+class TableModel7 extends DefaultTableModel{
+	static Object[] columnnames = new Object[]{"入账时间","项目代码","项目名称","期数","项目团队","职员","项目性质","管理费","业绩报酬"};
+	public TableModel7(){
+		super(columnnames,0);
+	}
+}
+
+//入账时间	项目代码	项目名称	期数	项目团队	职员	项目性质	销售服务费
+class TableModel8 extends DefaultTableModel{
+	static Object[] columnnames = new Object[]{"入账时间","项目代码","项目名称","期数","项目团队","职员","项目性质","销售服务费"};
+	public TableModel8(){
 		super(columnnames,0);
 	}
 }

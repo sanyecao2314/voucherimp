@@ -37,7 +37,7 @@ public class SuperServices {
 		if(templist != null && templist.size() == 1){
 			return ((HashMap)templist.get(0)).get("FItemID").toString();
 		}else if(templist == null || templist.size() == 0){
-			throw new Exception("未找到编码包含" + fnumber + "的辅助核算项目!");
+			throw new Exception("未找到包含" + fnumber + "的辅助核算项目!");
 		}else{
 			throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
 		}
