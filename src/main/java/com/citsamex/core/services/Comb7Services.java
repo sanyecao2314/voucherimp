@@ -104,13 +104,13 @@ public class Comb7Services extends SuperServices {
 			checkYearAndMonth(year, month);
 			
 			//检查第一个辅助核算项	工程项目
-			sql = "select FItemID from t_item where fname = '" + str[2] + "' and FItemClassID=2039";
-			projectId = getFItemID(sql, str[2]);
+			sql = "select FItemID from t_item where fnumber = '" + str[1] + "' and FItemClassID=2039";
+			projectId = getFItemID(sql, str[1]);
 			//检查第一个辅助核算项	部门			
-			sql = "select FItemID from t_item where fname = '" + str[4] + "'  and FItemClassID=2";
+			sql = "select FItemID from t_item where fnumber = '" + str[4] + "'  and FItemClassID=2";
 			deptid = getFItemID(sql, str[4]);
 			//检查第三个辅助核算项	职员
-			sql = "select FItemID from t_item where fname = '"+str[5]+"' and FItemClassID=3";
+			sql = "select FItemID from t_item where fnumber = '"+str[5]+"' and FItemClassID=3";
 			empid = getFItemID(sql, str[5]);
 			
 			//贷方科目：主营业务收入/管理费收入/专户管理费收入		2部门 3职员2039工程项目
@@ -199,8 +199,9 @@ public class Comb7Services extends SuperServices {
 			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+tempvo.getFYear()+" and FPeriod="+tempvo.getFPeriod());
 			int fnumber = Integer.parseInt(obj == null ? "1":obj.toString());
 			
-			BigDecimal amount = new BigDecimal("0");
+			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
 			for (int i = 0; i < volist.size(); i++) {
+				BigDecimal amount = new BigDecimal("0");
 				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
 				String tempAmount = vevo.getFAmount().replaceAll(",","");
 				BigDecimal taxAmount = new BigDecimal(tempAmount).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4);
@@ -215,17 +216,14 @@ public class Comb7Services extends SuperServices {
 				stat.execute(jvoucherentrySql);
 				stat.execute(dvoucherentrySql1);
 				stat.execute(dvoucherentrySql2);
+				voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
+						+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'"+tempvo.getFExplanation()+"',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
+				stat.execute(voucherSql);
+				//更新配置表
+				String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
+				stat.execute(updateSql);
 			}
 
-			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
-			voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
-				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'"+tempvo.getFExplanation()+"',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
-			stat.execute(voucherSql);
-
-			//更新配置表
-			String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
-			stat.execute(updateSql);
-			
 			conn.commit();
 		} catch (Exception e) {
 			conn.rollback();
