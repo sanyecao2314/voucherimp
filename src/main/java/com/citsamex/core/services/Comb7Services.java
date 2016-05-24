@@ -219,18 +219,18 @@ public class Comb7Services extends SuperServices {
 				dvoucherentrySql2 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
 						+ "values(0," + FVoucherID + ","+2+",'"+vevo.getFExplanation()+"'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+0+");";
 				amount = amount.add(new BigDecimal(tempAmount));
-				stat.execute(jvoucherentrySql);
-				stat.execute(dvoucherentrySql1);
-				stat.execute(dvoucherentrySql2);
+				stat.addBatch(jvoucherentrySql);
+				stat.addBatch(dvoucherentrySql1);
+				stat.addBatch(dvoucherentrySql2);
 				voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
 						+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + vevo.getFYear() + "," + vevo.getFPeriod() + ",1," + fnumber + ",null,'"+vevo.getFExplanation()+"',0,2," + amount + "," + amount + ",null,0,0," + vevo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
-				stat.execute(voucherSql);
+				stat.addBatch(voucherSql);
 				//∏¸–¬≈‰÷√±Ì
 				String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
-				stat.execute(updateSql);
-				conn.commit();
+				stat.addBatch(updateSql);
 			}
-
+			stat.executeBatch();
+			conn.commit();
 		} catch (Exception e) {
 			conn.rollback();
 			e.printStackTrace();
