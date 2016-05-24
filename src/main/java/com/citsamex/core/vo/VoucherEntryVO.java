@@ -32,6 +32,7 @@ public class VoucherEntryVO {
 	private String dAccountID;
 	private String FYear;
 	private String FPeriod;
+	private String FDay;
 	private String FPreparerID;
 	private String FDDetailID;
 	private String FJDetailID;
@@ -215,6 +216,13 @@ public class VoucherEntryVO {
 	}
 	public void setFPeriod(String period) {
 		FPeriod = period;
+	}
+	
+	public String getFDay() {
+		return FDay;
+	}
+	public void setFDay(String fDay) {
+		FDay = fDay;
 	}
 	public String getFPreparerID() {
 		return FPreparerID;

@@ -142,6 +142,7 @@ public class Comb8Services extends SuperServices {
 				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
 				voucherEntryvo.setFYear(String.valueOf(year));
 				voucherEntryvo.setFPeriod(String.valueOf(month));
+				voucherEntryvo.setFDay(str[0]);
 				voucherEntryvo.setFPreparerID(userid);
 				voucherEntryvo.setFExplanation(str[2] + "销售服务费收入");
 				voucherEntryvo.setJAccountID(jaccsubjid);
@@ -180,39 +181,42 @@ public class Comb8Services extends SuperServices {
 			String dvoucherentrySql2 = null;
 			
 			//凭证ID.
-			int FVoucherID = Integer.parseInt(DBUtil.querySqlUniqueResult("select FMaxNum+1 from icmaxnum where FTableName='t_voucher'").toString());
+			int initFVoucherID = Integer.parseInt(DBUtil.querySqlUniqueResult("select FMaxNum+1 from icmaxnum where FTableName='t_voucher'").toString());
 			//凭证号
-			VoucherEntryVO tempvo = (VoucherEntryVO) volist.get(0);
-			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+tempvo.getFYear()+" and FPeriod="+tempvo.getFPeriod());
-			int fnumber = Integer.parseInt(obj == null ? "1":obj.toString());
-			
-			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
+			VoucherEntryVO vevo = (VoucherEntryVO) volist.get(0);
+			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+vevo.getFYear()+" and FPeriod="+vevo.getFPeriod());
+			int initfnumber = Integer.parseInt(obj == null ? "1":obj.toString());
 			for (int i = 0; i < volist.size(); i++) {
+				int FVoucherID = initFVoucherID + i;
+				int fnumber = initfnumber + i;
+				
+				vevo = (VoucherEntryVO) volist.get(i);
+//				String dateStr = DateUtil.getDateStr(vevo.getFYear(), vevo.getFPeriod());
+				String dateStr = vevo.getFDay();
 				BigDecimal amount = new BigDecimal("0");
-				VoucherEntryVO vevo = (VoucherEntryVO) volist.get(i);
 				String tempAmount = vevo.getFAmount().replaceAll(",","");
 				BigDecimal taxAmount = new BigDecimal(tempAmount).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4);
 				BigDecimal tempAmount2 = new BigDecimal(tempAmount).subtract(taxAmount);
 				jvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+i*3+",'"+vevo.getFExplanation()+"'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+1)+")";
+					+ "values(0," + FVoucherID + ","+0+",'"+vevo.getFExplanation()+"'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+1+")";
 				dvoucherentrySql1 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+(i*3+1)+",'"+vevo.getFExplanation()+"'," + getFAccountID() + ",0,1,1,0," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*3+");";
+					+ "values(0," + FVoucherID + ","+1+",'"+vevo.getFExplanation()+"'," + getFAccountID() + ",0,1,1,0," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+0+");";
 				dvoucherentrySql2 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-						+ "values(0," + FVoucherID + ","+(i*3+2)+",'"+vevo.getFExplanation()+"'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*3+");";
+						+ "values(0," + FVoucherID + ","+2+",'"+vevo.getFExplanation()+"'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+0+");";
 				amount = amount.add(new BigDecimal(tempAmount));
 				stat.execute(jvoucherentrySql);
 				stat.execute(dvoucherentrySql1);
 				stat.execute(dvoucherentrySql2);
 				voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
-						+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'"+tempvo.getFExplanation()+"',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
+						+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + vevo.getFYear() + "," + vevo.getFPeriod() + ",1," + fnumber + ",null,'"+vevo.getFExplanation()+"',0,2," + amount + "," + amount + ",null,0,0," + vevo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 				stat.execute(voucherSql);
 				
 				//更新配置表
 				String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
 				stat.execute(updateSql);
+				conn.commit();
 			}
 			
-			conn.commit();
 		} catch (Exception e) {
 			conn.rollback();
 			e.printStackTrace();
