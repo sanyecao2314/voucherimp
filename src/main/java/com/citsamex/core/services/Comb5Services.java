@@ -120,7 +120,7 @@ public class Comb5Services extends SuperServices {
 			deptId = getFItemID(sql, "04.001");
 			
 			//借方科目：管理费用/市场营销开支/销售手续费支出/直销手续费支出	2部门 3职员2039工程项目 
-			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2=" + deptId + " and F3=" + empid + "and F2039=" + voucherEntryvo.getProject();
+			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2=" + deptId + " and F3=" + empid + " and F2039=" + voucherEntryvo.getProject();
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFJDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
@@ -217,7 +217,7 @@ public class Comb5Services extends SuperServices {
 					+ "values(0," + FVoucherID + ","+i*2+",'" + vevo.getFExplanation() + "'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*2+1)+")";
 				dvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
 					+ "values(0," + FVoucherID + ","+(i*2+1)+",'" + vevo.getFExplanation() + "'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+i*2+")";
-				amount = amount.add(new BigDecimal(tempAmount));
+				amount = amount.add(tempAmount2);
 				stat.execute(jvoucherentrySql1);
 				stat.execute(dvoucherentrySql);
 			}
