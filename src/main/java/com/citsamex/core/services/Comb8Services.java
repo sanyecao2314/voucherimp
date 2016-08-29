@@ -114,7 +114,7 @@ public class Comb8Services extends SuperServices {
 			empid = getFItemID(sql, str[5]);
 			
 			//贷方科目：主营业务收入/管理费收入/专户管理费收入		2部门 3职员2039工程项目
-			sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2=" + deptid + " and F3=" + empid + " and F2039=" + projectId;
+			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2=" + deptid + " and F3=" + empid + " and F2039=" + projectId;
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				fDetailID = ((HashMap)templist.get(0)).get("FDetailID").toString();
