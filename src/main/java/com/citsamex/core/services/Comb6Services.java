@@ -132,7 +132,7 @@ public class Comb6Services extends SuperServices {
 			}
 			
 			//贷方科目：主营业务收入/管理费收入/专户管理费收入		2部门 3职员2039工程项目
-			sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2=" + deptid + " and F3=" + empid + " and F8=" + voucherEntryvo.getProject();
+			sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F2=" + deptid + " and F3=" + empid + " and F2039=" + voucherEntryvo.getProject();
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFDDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
@@ -218,7 +218,7 @@ public class Comb6Services extends SuperServices {
 
 			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
 			voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
-				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'"+tempvo.getFExplanation()+"',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
+				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'"+tempvo.getFExplanation()+"',0,3," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 			stat.execute(voucherSql);
 
 			//更新配置表
