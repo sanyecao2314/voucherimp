@@ -113,7 +113,7 @@ public class Comb6Services extends SuperServices {
 			empid = getFItemID(sql, str[4]);
 			
 			//借方科目：应收账款/应收管理费			2039工程项目
-			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2039=" + voucherEntryvo.getProject();
+			sql = "select min(FDetailID) as FDetailID from t_ItemDetail where FDetailCount=3 and F2039=" + voucherEntryvo.getProject();
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFJDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
