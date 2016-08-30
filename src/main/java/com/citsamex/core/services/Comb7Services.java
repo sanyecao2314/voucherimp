@@ -116,9 +116,9 @@ public class Comb7Services extends SuperServices {
 			//贷方科目：主营业务收入/管理费收入/专户管理费收入		2部门 3职员2039工程项目
 			sql = "select  min(FDetailID) as FDetailID from t_ItemDetail where FDetailCount=3 and F2=" + deptid + " and F3=" + empid + " and F2039=" + projectId;
 			templist = DBUtil.querySql(sql);
-			if(templist != null && templist.size() == 1){
+			if(templist != null && templist.size() == 1 && ((HashMap)templist.get(0)).get("FDetailID") != null){
 				fDetailID = ((HashMap)templist.get(0)).get("FDetailID").toString();
-			}else if(templist == null || templist.size() == 0){
+			} else {
 				//没有辅助核算信息.插入t_ItemDetail和t_ItemDetailV表辅助核算信息.
 				Object  maxFDetailID = DBUtil.querySqlUniqueResult("select max(FDetailID)+1 from t_ItemDetail ");
 				String insertItemDetail = "insert into t_ItemDetail(FDetailID,FDetailCount,F1,F2,F3,F4,F5,F8,F9,F10,F14,F2001,F2002,F2003,F2004,F2014,F2023,F2021,F2024,F2026,F2027,F2028,F2029,F2030,F2035,F2036,F2039,F2040,F2041) "
@@ -134,8 +134,6 @@ public class Comb7Services extends SuperServices {
 					+ "values ("+maxFDetailID+",2039,"+projectId+")";
 				DBUtil.excuteUpdate(insertItemDetailV);
 				fDetailID = maxFDetailID.toString();
-			}else{
-				throw new Exception("查询辅助核算项目异常.请执行sql检查:" + sql);
 			}
 			
 			if(!StringUtil.isEmpty(str[7]) && Double.parseDouble(str[7]) != 0.0d){
