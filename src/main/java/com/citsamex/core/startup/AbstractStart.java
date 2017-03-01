@@ -319,7 +319,7 @@ class TableModel6 extends DefaultTableModel{
 }
 //入账时间	项目代码	项目名称	期数	项目团队	职员	项目性质	管理费	业绩报酬
 class TableModel7 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"入账时间","项目代码","项目名称","期数","项目团队","职员","项目性质","管理费","业绩报酬"};
+	static Object[] columnnames = new Object[]{"入账时间","项目代码","项目名称","期数","项目团队","职员","项目性质","管理费","业绩报酬","风险金"};
 	public TableModel7(){
 		super(columnnames,0);
 	}
