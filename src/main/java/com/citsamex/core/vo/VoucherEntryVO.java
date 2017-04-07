@@ -41,7 +41,14 @@ public class VoucherEntryVO {
 	 * 辅助核算项:销售商
 	 */
 	private String Fxss;
-	
+	/**
+	 * 风险金
+	 */
+	private String fxj;
+	/**
+	 * 是否管理费收入
+	 */
+	private boolean glf;
 	
 	public String getProject() {
 		return project;
@@ -247,6 +254,18 @@ public class VoucherEntryVO {
 	}
 	public void setFDDetailID(String detailID) {
 		FDDetailID = detailID;
+	}
+	public String getFxj() {
+		return fxj;
+	}
+	public void setFxj(String fxj) {
+		this.fxj = fxj;
+	}
+	public boolean isGlf() {
+		return glf;
+	}
+	public void setGlf(boolean glf) {
+		this.glf = glf;
 	}
 	
 }

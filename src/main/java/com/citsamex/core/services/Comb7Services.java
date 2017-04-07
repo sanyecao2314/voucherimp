@@ -70,6 +70,12 @@ public class Comb7Services extends SuperServices {
 		return voList;
 	}
 	
+	private static String jaccsubjid1 = null;		//银行存款
+	private static String jaccsubjid2 = null;		//风险金专户
+	private static String daccsubjid1 = null;		//专户管理费收入
+	private static String daccsubjid21 = null;		//专户管理费收入 	 管理费用这个
+	private static String daccsubjid22 = null;		//专户  业绩报酬用这个
+	
 	/**
 	 * 转换文件
 	 * @param list 
@@ -84,10 +90,13 @@ public class Comb7Services extends SuperServices {
 		
 		List voList = new ArrayList();
 		List templist = null;
-		String jaccsubjid1 = getAccsubjid("1002.01.01.04");		//银行存款
-		String jaccsubjid2 = getAccsubjid("1002.01.01.06");		//风险金专户
-		String daccsubjid1 = getAccsubjid("6001.01.02");		//专户管理费收入
-		String daccsubjid2 = getAccsubjid("6001.02.02");		//专户
+		jaccsubjid1 = getAccsubjid("1002.01.01.04");		//银行存款
+		jaccsubjid2 = getAccsubjid("1002.01.01.06");		//风险金专户
+		daccsubjid1 = getAccsubjid("2221.04.02");		//应交税费-增值税-销项税额
+		daccsubjid21 = getAccsubjid("6001.01.02");		//专户管理费收入 	 管理费用这个
+		daccsubjid22 = getAccsubjid("6001.02.02");		//专户  业绩报酬用这个
+		
+		//2221.04.02   应交税费-增值税-销项税额
 		String userid = getUserId(mainUI.usernameTextField.getText());
 		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -137,52 +146,79 @@ public class Comb7Services extends SuperServices {
 				fDetailID = maxFDetailID.toString();
 			}
 			
-			if(!StringUtil.isEmpty(str[7]) && Double.parseDouble(str[7]) != 0.0d){
-				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-				voucherEntryvo.setFYear(String.valueOf(year));
-				voucherEntryvo.setFPeriod(String.valueOf(month));
-				voucherEntryvo.setFDay(str[0]);
-				voucherEntryvo.setFPreparerID(userid);
-				voucherEntryvo.setFExplanation(str[2] + "管理费收入");
-				voucherEntryvo.setJAccountID(jaccsubjid1);
-				voucherEntryvo.setDAccountID(daccsubjid1);
-				voucherEntryvo.setFJDetailID("0");
-				voucherEntryvo.setFDDetailID(fDetailID);
-				if (!StringUtil.isEmpty(str[9]) && Double.parseDouble(str[9]) != 0.0d) {
-					voucherEntryvo.setFAmount(new BigDecimal(Double.parseDouble(str[9]) - Double.parseDouble(str[7])).setScale(2, 4).toString());
-				} else {
-					voucherEntryvo.setFAmount(str[7]);
-				}
-				voList.add(voucherEntryvo);
-			};
-			if(!StringUtil.isEmpty(str[9]) && Double.parseDouble(str[9]) != 0.0d){
-				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-				voucherEntryvo.setFYear(String.valueOf(year));
-				voucherEntryvo.setFPeriod(String.valueOf(month));
-				voucherEntryvo.setFDay(str[0]);
-				voucherEntryvo.setFPreparerID(userid);
-				voucherEntryvo.setFExplanation(str[2] + "管理费收入");
-				voucherEntryvo.setJAccountID(jaccsubjid2);
-				voucherEntryvo.setDAccountID(daccsubjid2);
-				voucherEntryvo.setFJDetailID("0");
-				voucherEntryvo.setFDDetailID(fDetailID);
-				voucherEntryvo.setFAmount(str[7]);
-				voList.add(voucherEntryvo);
-			};
-			if(!StringUtil.isEmpty(str[8]) && Double.parseDouble(str[8]) != 0.0d){
-				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-				voucherEntryvo.setFYear(String.valueOf(year));
-				voucherEntryvo.setFPeriod(String.valueOf(month));
-				voucherEntryvo.setFDay(str[0]);
-				voucherEntryvo.setFPreparerID(userid);
-				voucherEntryvo.setFExplanation(str[2] + "管理费收入");
-				voucherEntryvo.setJAccountID(jaccsubjid1);
-				voucherEntryvo.setDAccountID(daccsubjid2);
-				voucherEntryvo.setFJDetailID("0");
-				voucherEntryvo.setFDDetailID(fDetailID);
-				voucherEntryvo.setFAmount(str[8]);
-				voList.add(voucherEntryvo);
-			};
+			VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
+			voucherEntryvo.setFYear(String.valueOf(year));
+			voucherEntryvo.setFPeriod(String.valueOf(month));
+			voucherEntryvo.setFDay(str[0]);
+			voucherEntryvo.setFPreparerID(userid);
+			voucherEntryvo.setFExplanation(str[2] + "管理费收入");
+//			voucherEntryvo.setJAccountID(jaccsubjid1);
+//			voucherEntryvo.setDAccountID(daccsubjid1);
+			voucherEntryvo.setFJDetailID("0");
+			voucherEntryvo.setFDDetailID(fDetailID);
+			
+			//管理费
+			double glf = getAmount(str[7]);
+			//业绩报酬
+			double yjbc = getAmount(str[8]);
+			//风险金
+			double fxj = getAmount(str[9]);
+			//管理费 + 业绩报酬 — 风险金
+			voucherEntryvo.setFAmount(new BigDecimal(glf + yjbc).setScale(2, 4).toString());
+			voucherEntryvo.setFxj(fxj+ "");
+			voucherEntryvo.setGlf(glf > 0);
+			
+			
+			voList.add(voucherEntryvo);
+			
+//			//管理费
+//			if(!StringUtil.isEmpty(str[7]) && Double.parseDouble(str[7]) != 0.0d){
+//				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
+//				voucherEntryvo.setFYear(String.valueOf(year));
+//				voucherEntryvo.setFPeriod(String.valueOf(month));
+//				voucherEntryvo.setFDay(str[0]);
+//				voucherEntryvo.setFPreparerID(userid);
+//				voucherEntryvo.setFExplanation(str[2] + "管理费收入");
+////				voucherEntryvo.setJAccountID(jaccsubjid1);
+////				voucherEntryvo.setDAccountID(daccsubjid1);
+//				voucherEntryvo.setFJDetailID("0");
+//				voucherEntryvo.setFDDetailID(fDetailID);
+//				if (!StringUtil.isEmpty(str[9]) && Double.parseDouble(str[9]) != 0.0d) {
+//					//管理费—风险金
+//					voucherEntryvo.setFAmount(new BigDecimal(Double.parseDouble(str[7]) - Double.parseDouble(str[9])).setScale(2, 4).toString());
+//				} else {
+//					voucherEntryvo.setFAmount(str[7]);
+//				}
+//				voList.add(voucherEntryvo);
+//			} else if(!StringUtil.isEmpty(str[9]) && Double.parseDouble(str[9]) != 0.0d){
+//				//风险金
+//				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
+//				voucherEntryvo.setFYear(String.valueOf(year));
+//				voucherEntryvo.setFPeriod(String.valueOf(month));
+//				voucherEntryvo.setFDay(str[0]);
+//				voucherEntryvo.setFPreparerID(userid);
+//				voucherEntryvo.setFExplanation(str[2] + "管理费收入");
+////				voucherEntryvo.setJAccountID(jaccsubjid2);
+////				voucherEntryvo.setDAccountID(daccsubjid2);
+//				voucherEntryvo.setFJDetailID("0");
+//				voucherEntryvo.setFDDetailID(fDetailID);
+//				voucherEntryvo.setFAmount(str[7]);
+//				voList.add(voucherEntryvo);
+//			} else if(!StringUtil.isEmpty(str[8]) && Double.parseDouble(str[8]) != 0.0d){
+//				//业绩报酬
+//				VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
+//				voucherEntryvo.setFYear(String.valueOf(year));
+//				voucherEntryvo.setFPeriod(String.valueOf(month));
+//				voucherEntryvo.setFDay(str[0]);
+//				voucherEntryvo.setFPreparerID(userid);
+//				voucherEntryvo.setFExplanation(str[2] + "管理费收入");
+////				voucherEntryvo.setJAccountID(jaccsubjid1);
+////				voucherEntryvo.setDAccountID(daccsubjid2);
+//				voucherEntryvo.setFJDetailID("0");
+//				voucherEntryvo.setFDDetailID(fDetailID);
+//				voucherEntryvo.setFAmount(str[8]);
+//				voList.add(voucherEntryvo);
+//			};
 		}
 		
 		return voList;
@@ -228,17 +264,28 @@ public class Comb7Services extends SuperServices {
 				String dateStr = vevo.getFDay();
 				BigDecimal amount = new BigDecimal("0");
 				String tempAmount = vevo.getFAmount().replaceAll(",","");
-				BigDecimal taxAmount = new BigDecimal(tempAmount).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4);
-				BigDecimal tempAmount2 = new BigDecimal(tempAmount).subtract(taxAmount);
+				String fxj = vevo.getFxj();
+				tempAmount = StringUtil.isEmpty(tempAmount)? "0" : tempAmount;
+				System.out.println("tempAmount=" + tempAmount);
+				BigDecimal tempAmount1 = new BigDecimal(tempAmount).subtract(new BigDecimal(fxj));
+				BigDecimal tempAmount2 = new BigDecimal(fxj);
+				BigDecimal tempAmount3 = new BigDecimal(tempAmount).divide(new BigDecimal(1.06), 10, 4).multiply(new BigDecimal("0.06")).setScale(2, 4);
+				BigDecimal tempAmount4 = new BigDecimal(tempAmount).subtract(tempAmount3);
+				String daccsubjid2 = vevo.isGlf() ? daccsubjid21 : daccsubjid22;
+				
 				jvoucherentrySql1 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+i*4+",'"+vevo.getFExplanation()+"'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+1+")";
+					+ "values(0," + FVoucherID + ","+0+",'"+vevo.getFExplanation()+"'," + jaccsubjid1 + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount1 + "," + tempAmount1 + ",0,0,0,null," + daccsubjid1 + ",0,null,null,0,0,0,1,"+1+")";
 				jvoucherentrySql2 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-						+ "values(0," + FVoucherID + ","+(i*4 + 1)+",'"+vevo.getFExplanation()+"'," + vevo.getJAccountID() + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+1+")";
+						+ "values(0," + FVoucherID + ","+1+",'"+vevo.getFExplanation()+"'," + jaccsubjid2 + "," + vevo.getFJDetailID() + ",1,1,1," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + daccsubjid2 + ",0,null,null,0,0,0,1,"+1+")";
 				dvoucherentrySql1 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+(i*4+2)+",'"+vevo.getFExplanation()+"'," + getFAccountID() + ",0,1,1,0," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+0+");";
+					+ "values(0," + FVoucherID + ","+2+",'"+vevo.getFExplanation()+"'," + daccsubjid1 + ",0,1,1,0," + tempAmount3 + "," + tempAmount3 + ",0,0,0,null," + jaccsubjid1 + ",0,null,null,0,0,0,1,"+0+");";
 				dvoucherentrySql2 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-						+ "values(0," + FVoucherID + ","+(i*4+3)+",'"+vevo.getFExplanation()+"'," + vevo.getDAccountID() + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount2 + "," + tempAmount2 + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+0+");";
+						+ "values(0," + FVoucherID + ","+3+",'"+vevo.getFExplanation()+"'," + daccsubjid2 + "," + vevo.getFDDetailID() + ",1,1,0," + tempAmount4 + "," + tempAmount4 + ",0,0,0,null," + jaccsubjid2 + ",0,null,null,0,0,0,1,"+0+");";
 				amount = amount.add(new BigDecimal(tempAmount));
+				System.out.println(jvoucherentrySql1);
+				System.out.println(jvoucherentrySql2);
+				System.out.println(dvoucherentrySql1);
+				System.out.println(dvoucherentrySql2);
 				stat.addBatch(jvoucherentrySql1);
 				stat.addBatch(jvoucherentrySql2);
 				stat.addBatch(dvoucherentrySql1);
@@ -263,9 +310,18 @@ public class Comb7Services extends SuperServices {
 		return 0;
 	}
 
-	private String getFAccountID() throws Exception{
-		//  应交税费-增值税-销项税额
-		return getAccsubjid("2221.04.02");
+//	private String getFAccountID() throws Exception{
+//		//  应交税费-增值税-销项税额
+//		return getAccsubjid("2221.04.02");
+//	}
+	
+	
+	private double getAmount(String str){
+		if (StringUtil.isEmpty(str) || Double.valueOf(str.replace(",", "")) == 0) {
+			return 0d;
+		} else {
+			return Double.valueOf(str.replace(",", ""));
+		}
 	}
 
 	
