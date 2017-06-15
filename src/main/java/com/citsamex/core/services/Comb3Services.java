@@ -49,9 +49,9 @@ public class Comb3Services extends SuperServices{
 				return null;
 			}
 			String value = null;
-			for (int i = 7, rows = sht.getLastRowNum(); i < rows; i++) {
+			for (int i = 5, rows = sht.getLastRowNum(); i < rows; i++) {
 				row = sht.getRow(i);
-				value = ExcelUtil.getCellValue(row.getCell(7));
+				value = ExcelUtil.getCellValue(row.getCell(4));
 				if (value != null && value.contains("基金代码")) {
 					continue;
 				}else if(value == null || "".equals(value.trim())){
@@ -59,13 +59,13 @@ public class Comb3Services extends SuperServices{
 				}
 					
 				String[] vo = new String[7];
-				vo[0] = ExcelUtil.getCellValue(row.getCell(3));
-				vo[1] = ExcelUtil.getCellValue(row.getCell(7));
-				vo[2] = ExcelUtil.getCellValue(row.getCell(10));
-				vo[3] = ExcelUtil.getCellValue(row.getCell(14));
-				vo[4] = ExcelUtil.getCellValue(row.getCell(21));
-				vo[5] = ExcelUtil.getCellValue(row.getCell(27));
-				vo[6] = ExcelUtil.getCellValue(row.getCell(32));
+				vo[0] = ExcelUtil.getCellValue(row.getCell(1));		//销售商
+				vo[1] = ExcelUtil.getCellValue(row.getCell(4));		//基金代码
+				vo[2] = ExcelUtil.getCellValue(row.getCell(5));		//基金名称
+				vo[3] = ExcelUtil.getCellValue(row.getCell(10));	//托管金额累计
+				vo[4] = ExcelUtil.getCellValue(row.getCell(14));	//托管份额累计
+				vo[5] = ExcelUtil.getCellValue(row.getCell(16));	//平均托管金额
+				vo[6] = ExcelUtil.getCellValue(row.getCell(19));	//应付尾随佣金
 				voList.add(vo);
 			}
 		} catch (Exception e) {
@@ -77,7 +77,7 @@ public class Comb3Services extends SuperServices{
 	/**
 	 * 转换文件
 	 * @param list 
-	 * 销售商				基金代码			基金名称				托管金额累计							托管份额累计						平均托管金额					尾随佣金			
+	 * 销售商	基金代码		基金名称		托管金额累计		托管份额累计		平均托管金额		尾随佣金			
 	 * @return
 	 * @throws Exception 
 	 */
