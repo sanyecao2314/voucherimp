@@ -51,14 +51,14 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	protected JScrollPane jScrollPane1;
 	public JComboBox monthComboBox;
 
-	protected final static String COMBOVALUE1 = "¹«Ä¼»ù½ğ·ÑÓÃ±í";
-	protected final static String COMBOVALUE2 = "¹«Ë¾ÊÖĞø·ÑÊÕÈë»®²¦Ã÷Ï¸±í";
-	protected final static String COMBOVALUE3 = "Î²ËæÓ¶½ğ»ã×Ü±í";
-	protected final static String COMBOVALUE4 = "Î²ËæÓ¶½ğ»ã×Ü±í_±ÈÀı";
-	protected final static String COMBOVALUE5 = "Ö±ÏúÊÖĞø·ÑÃ÷Ï¸";
-	protected final static String COMBOVALUE6 = "×¨»§»ù½ğ·ÑÓÃ±í";
-	protected final static String COMBOVALUE7 = "¹«Ë¾¹ÜÀí·Ñ¼°Òµ¼¨±¨³ê»®²¦Ã÷Ï¸±í";
-	protected final static String COMBOVALUE8 = "¹«Ë¾ÏúÊÛ·şÎñ·Ñ»®²¦Ã÷Ï¸±í";
+	protected final static String COMBOVALUE1 = "å…¬å‹ŸåŸºé‡‘è´¹ç”¨è¡¨";
+	protected final static String COMBOVALUE2 = "å…¬å¸æ‰‹ç»­è´¹æ”¶å…¥åˆ’æ‹¨æ˜ç»†è¡¨";
+	protected final static String COMBOVALUE3 = "å°¾éšä½£é‡‘æ±‡æ€»è¡¨";
+	protected final static String COMBOVALUE4 = "å°¾éšä½£é‡‘æ±‡æ€»è¡¨_æ¯”ä¾‹";
+	protected final static String COMBOVALUE5 = "ç›´é”€æ‰‹ç»­è´¹æ˜ç»†";
+	protected final static String COMBOVALUE6 = "ä¸“æˆ·åŸºé‡‘è´¹ç”¨è¡¨";
+	protected final static String COMBOVALUE7 = "å…¬å¸ç®¡ç†è´¹åŠä¸šç»©æŠ¥é…¬åˆ’æ‹¨æ˜ç»†è¡¨";
+	protected final static String COMBOVALUE8 = "å…¬å¸é”€å”®æœåŠ¡è´¹åˆ’æ‹¨æ˜ç»†è¡¨";
 	
 	/**
 	 * namemap
@@ -109,13 +109,13 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 				{
 					remark = new JTextArea();
 					jPanel1.add(remark);
-					remark.setText("ÈÕÖ¾ĞÅÏ¢");
+					remark.setText("æ—¥å¿—ä¿¡æ¯");
 					remark.setBounds(12, 34, 978, 64);
 				}
 				{
 					chooseButton = new JButton();
 					jPanel1.add(chooseButton);
-					chooseButton.setText("Ñ¡ÔñÎÄ¼ş");
+					chooseButton.setText("é€‰æ‹©æ–‡ä»¶");
 					chooseButton.setBounds(231, 5, 104, 23);
 					chooseButton
 							.setToolTipText("\u9009\u62e9\u8981\u5145\u503c\u7684excel\u6587\u4ef6");
@@ -134,7 +134,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 				{
 					impButton = new JButton();
 					jPanel1.add(impButton);
-					impButton.setText("µ¼Èë");
+					impButton.setText("å¯¼å…¥");
 					impButton.setBounds(445, 7, 84, 21);
 					impButton.setToolTipText("\u5c06\u9009\u62e9\u7684Excel\u6587\u4ef6\u6570\u636e\u8bfb\u53d6\u5230\u754c\u9762");
 					impButton.addActionListener(this);
@@ -163,7 +163,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	}
 	
 	protected void initData() {
-		//ÉèÖÃÄ¬ÈÏµÄtablemodel.
+		//è®¾ç½®é»˜è®¤çš„tablemodel.
 		
 		defaultTableModel = new TableModel7();
 		dataTable.setModel(defaultTableModel);
@@ -172,7 +172,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	
 
 	/**
-	 * Ñ¡ÔñÎÄ¼ş
+	 * é€‰æ‹©æ–‡ä»¶
 	 */
 	protected boolean chooseButtonKeyReleased() {
 		JFileChooser chooser = new JFileChooser();
@@ -188,7 +188,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	
 	
 	/**
-	 * Ñ¡Ôñ×ª»»ÎÄ¼ş
+	 * é€‰æ‹©è½¬æ¢æ–‡ä»¶
 	 */
 	private void convertButtonKeyReleased() {
 		JFileChooser chooser = new JFileChooser();
@@ -205,17 +205,17 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	
 	File newfile = null;
 	/**
-	 * ½âÎöexcelÎÄ¼ş,½«Êı¾İ·Åµ½½çÃæºÍ»º´æÖĞ.
+	 * è§£æexcelæ–‡ä»¶,å°†æ•°æ®æ”¾åˆ°ç•Œé¢å’Œç¼“å­˜ä¸­.
 	 * 
 	 * @param file
 	 */
 	private boolean analyseFile(File choosefile) {
 		if (choosefile == null) {
-			System.out.println("Ñ¡ÔñµÄÎÄ¼şÎª¿Õ");
+			System.out.println("é€‰æ‹©çš„æ–‡ä»¶ä¸ºç©º");
 			return false;
 		}
 		if (!choosefile.getName().endsWith("xls")) {
-			JOptionPane.showMessageDialog(this, "ÄúÊäÈëµÄÎÄ¼şÀàĞÍ²»ÕıÈ·,Ö»ÔËĞĞxls¸ñÊ½µÄÎÄ¼ş£¡");
+			JOptionPane.showMessageDialog(this, "æ‚¨è¾“å…¥çš„æ–‡ä»¶ç±»å‹ä¸æ­£ç¡®,åªè¿è¡Œxlsæ ¼å¼çš„æ–‡ä»¶ï¼");
 			selectedFile = null;
 			return false;
 		}
@@ -225,14 +225,14 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 
     
     /**
-	 * µ¯³öÎÄ¼şÑ¡Ôñ¿òÏòÓÃ»§Ñ¯ÎÊµ¼³öÎÄ¼şÃû
+	 * å¼¹å‡ºæ–‡ä»¶é€‰æ‹©æ¡†å‘ç”¨æˆ·è¯¢é—®å¯¼å‡ºæ–‡ä»¶å
 	 * 
 	 * @param mode the mode of the dialog; either
 	 *              <code>FileDialog.LOAD</code> or <code>FileDialog.SAVE</code>
-	 * @return Èç¹ûÓÃ»§Ñ¡ÔñÈ¡Ïû·µ»Ø null£¬·ñÔò·µ»ØÍêÕûÎÄ¼şÃû(Â·¾¶+Ãû³Æ)
+	 * @return å¦‚æœç”¨æˆ·é€‰æ‹©å–æ¶ˆè¿”å› nullï¼Œå¦åˆ™è¿”å›å®Œæ•´æ–‡ä»¶å(è·¯å¾„+åç§°)
 	 */
 	private String getFilename(String month) {
-		FileDialog fileDialog = new FileDialog(this,"ÎÄ¼ş±£´æ",FileDialog.SAVE);
+		FileDialog fileDialog = new FileDialog(this,"æ–‡ä»¶ä¿å­˜",FileDialog.SAVE);
 //		UIFileChooser filechoose = getFileChooseDlg();
 //		.showSaveDialog(this);
 		fileDialog.setFile("output_" + month.replace("-","") + ".xls");
@@ -248,13 +248,13 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 	}
 	
 	/**
-	 * ²åÈëµ¥Ôª¸ñ,±¾ÉíÃ»ÓĞÕâ¸ö¹¦ÄÜ,Í¨¹ıÑ­»·ÏòºóÒÆ¶¯µ¥Ôª¸ñÊµÏÖ.
+	 * æ’å…¥å•å…ƒæ ¼,æœ¬èº«æ²¡æœ‰è¿™ä¸ªåŠŸèƒ½,é€šè¿‡å¾ªç¯å‘åç§»åŠ¨å•å…ƒæ ¼å®ç°.
 	 * fans.fan
 	 * @param row
 	 * @param i
 	 */
 	private void insertCell(HSSFRow row,int i){
-		int lastcellnum = row.getLastCellNum(); //×îºóÒ»¸öµ¥Ôª¸ñ
+		int lastcellnum = row.getLastCellNum(); //æœ€åä¸€ä¸ªå•å…ƒæ ¼
 		HSSFCell cell = null;
 		for (; lastcellnum <= i  ; lastcellnum--) {
 			cell = row.getCell(lastcellnum);
@@ -277,57 +277,57 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 }
 
 class TableModel1 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÈÕÆÚ","»ù½ğ´úÂë","»ù½ğÃû³Æ","¹ÜÀí·Ñ»ã×Ü","ÍĞ¹Ü·Ñ","ÏúÊÛ·ÑÓÃ","±£Ö¤½ğ"};
+	static Object[] columnnames = new Object[]{"æ—¥æœŸ","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","ç®¡ç†è´¹æ±‡æ€»","æ‰˜ç®¡è´¹","é”€å”®è´¹ç”¨","ä¿è¯é‡‘"};
 	public TableModel1(){
 		super(columnnames,0);
 	}
 }
-//»ù½ğÃû³Æ	ºÏ¼Æ	Ö±ÏúÈÏ¹º·Ñ	Ö±ÏúÉê¹º·Ñ	Ö±ÏúÊê»Ø·Ñ	Ö±Ïú×ª»»·Ñ	Ö±Ïú²¹²î·Ñ	Ö±ÏúÏúÊÛ·şÎñ·Ñ	¹«Ë¾ÈÏ¹º·Ñ	¹«Ë¾Éê¹º·Ñ	¹«Ë¾Êê»Ø·Ñ	¹«Ë¾×ª»»·Ñ	¹«Ë¾²¹²î·Ñ	¹«Ë¾ºó¶ËÉê¹º·Ñ
+//åŸºé‡‘åç§°	åˆè®¡	ç›´é”€è®¤è´­è´¹	ç›´é”€ç”³è´­è´¹	ç›´é”€èµå›è´¹	ç›´é”€è½¬æ¢è´¹	ç›´é”€è¡¥å·®è´¹	ç›´é”€é”€å”®æœåŠ¡è´¹	å…¬å¸è®¤è´­è´¹	å…¬å¸ç”³è´­è´¹	å…¬å¸èµå›è´¹	å…¬å¸è½¬æ¢è´¹	å…¬å¸è¡¥å·®è´¹	å…¬å¸åç«¯ç”³è´­è´¹
 class TableModel2 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"»ù½ğÃû³Æ","ºÏ¼Æ","Ö±ÏúÈÏ¹º·Ñ","Ö±ÏúÉê¹º·Ñ","Ö±ÏúÊê»Ø·Ñ","Ö±Ïú×ª»»·Ñ","Ö±Ïú²¹²î·Ñ","Ö±ÏúÏúÊÛ·şÎñ·Ñ","¹«Ë¾ÈÏ¹º·Ñ","¹«Ë¾Éê¹º·Ñ","¹«Ë¾Êê»Ø·Ñ","¹«Ë¾×ª»»·Ñ","¹«Ë¾²¹²î·Ñ","¹«Ë¾ºó¶ËÉê¹º·Ñ"};
+	static Object[] columnnames = new Object[]{"åŸºé‡‘åç§°","åˆè®¡","ç›´é”€è®¤è´­è´¹","ç›´é”€ç”³è´­è´¹","ç›´é”€èµå›è´¹","ç›´é”€è½¬æ¢è´¹","ç›´é”€è¡¥å·®è´¹","ç›´é”€é”€å”®æœåŠ¡è´¹","å…¬å¸è®¤è´­è´¹","å…¬å¸ç”³è´­è´¹","å…¬å¸èµå›è´¹","å…¬å¸è½¬æ¢è´¹","å…¬å¸è¡¥å·®è´¹","å…¬å¸åç«¯ç”³è´­è´¹"};
 	public TableModel2(){
 		super(columnnames,0);
 	}
 }
-//ÏúÊÛÉÌ				»ù½ğ´úÂë			»ù½ğÃû³Æ				ÍĞ¹Ü½ğ¶îÀÛ¼Æ							ÍĞ¹Ü·İ¶îÀÛ¼Æ						Æ½¾ùÍĞ¹Ü½ğ¶î					Î²ËæÓ¶½ğ			
+//é”€å”®å•†				åŸºé‡‘ä»£ç 			åŸºé‡‘åç§°				æ‰˜ç®¡é‡‘é¢ç´¯è®¡							æ‰˜ç®¡ä»½é¢ç´¯è®¡						å¹³å‡æ‰˜ç®¡é‡‘é¢					å°¾éšä½£é‡‘			
 class TableModel3 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÏúÊÛÉÌ","»ù½ğ´úÂë","»ù½ğÃû³Æ","ÍĞ¹Ü½ğ¶îÀÛ¼Æ","ÍĞ¹Ü·İ¶îÀÛ¼Æ","Æ½¾ùÍĞ¹Ü½ğ¶î","Î²ËæÓ¶½ğ"};
+	static Object[] columnnames = new Object[]{"é”€å”®å•†","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","æ‰˜ç®¡é‡‘é¢ç´¯è®¡","æ‰˜ç®¡ä»½é¢ç´¯è®¡","å¹³å‡æ‰˜ç®¡é‡‘é¢","å°¾éšä½£é‡‘"};
 	public TableModel3(){
 		super(columnnames,0);
 	}
 }
-//ÏúÊÛÉÌ´úÂë			ÏúÊÛÉÌ			»ù½ğ´úÂë						»ù½ğÃû³Æ			Æ½¾ùÍĞ¹Ü·İ¶î						Æ½¾ùÍĞ¹Ü½ğ¶î					Î²ËæÓ¶½ğ	
+//é”€å”®å•†ä»£ç 			é”€å”®å•†			åŸºé‡‘ä»£ç 						åŸºé‡‘åç§°			å¹³å‡æ‰˜ç®¡ä»½é¢						å¹³å‡æ‰˜ç®¡é‡‘é¢					å°¾éšä½£é‡‘	
 class TableModel4 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÏúÊÛÉÌ´úÂë","ÏúÊÛÉÌ","»ù½ğ´úÂë","»ù½ğÃû³Æ","Æ½¾ùÍĞ¹Ü·İ¶î","Æ½¾ùÍĞ¹Ü½ğ¶î","Î²ËæÓ¶½ğ"};
+	static Object[] columnnames = new Object[]{"é”€å”®å•†ä»£ç ","é”€å”®å•†","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","å¹³å‡æ‰˜ç®¡ä»½é¢","å¹³å‡æ‰˜ç®¡é‡‘é¢","å°¾éšä½£é‡‘"};
 	public TableModel4(){
 		super(columnnames,0);
 	}
 }
-//ÈÕÆÚ	ÏúÊÛ»ú¹¹	ÉêÇëÈÕÆÚ	ÒµÎñÀàĞÍ	»ù½ğÃû³Æ	È·ÈÏ½ğ¶î	·ÑÂÊ	ÊÖĞø·Ñ	¹éÏúÊÛ»ú¹¹
+//æ—¥æœŸ	é”€å”®æœºæ„	ç”³è¯·æ—¥æœŸ	ä¸šåŠ¡ç±»å‹	åŸºé‡‘åç§°	ç¡®è®¤é‡‘é¢	è´¹ç‡	æ‰‹ç»­è´¹	å½’é”€å”®æœºæ„
 class TableModel5 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÈÕÆÚ","ÏúÊÛ»ú¹¹","ÉêÇëÈÕÆÚ","ÒµÎñÀàĞÍ","»ù½ğ´úÂë","»ù½ğÃû³Æ","È·ÈÏ½ğ¶î","·ÑÂÊ","ÊÖĞø·Ñ","¹éÏúÊÛ»ú¹¹"};
+	static Object[] columnnames = new Object[]{"æ—¥æœŸ","é”€å”®æœºæ„","ç”³è¯·æ—¥æœŸ","ä¸šåŠ¡ç±»å‹","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","ç¡®è®¤é‡‘é¢","è´¹ç‡","æ‰‹ç»­è´¹","å½’é”€å”®æœºæ„"};
 	public TableModel5(){
 		super(columnnames,0);
 	}
 }
-//ÈÕÆÚ	»ù½ğ´úÂë	»ù½ğÃû³Æ	¹ÜÀí·Ñ»ã×Ü	ÍĞ¹Ü·Ñ	ÏúÊÛ·ÑÓÃ
+//æ—¥æœŸ	åŸºé‡‘ä»£ç 	åŸºé‡‘åç§°	ç®¡ç†è´¹æ±‡æ€»	æ‰˜ç®¡è´¹	é”€å”®è´¹ç”¨
 class TableModel6 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÈÕÆÚ","»ù½ğ´úÂë","»ù½ğÃû³Æ","²¿ÃÅ","Ö°Ô±","¹ÜÀí·Ñ»ã×Ü","ÍĞ¹Ü·Ñ","ÏúÊÛ·ÑÓÃ"};
+	static Object[] columnnames = new Object[]{"æ—¥æœŸ","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","éƒ¨é—¨","èŒå‘˜","ç®¡ç†è´¹æ±‡æ€»","æ‰˜ç®¡è´¹","é”€å”®è´¹ç”¨"};
 	public TableModel6(){
 		super(columnnames,0);
 	}
 }
-//ÈëÕËÊ±¼ä	ÏîÄ¿´úÂë	ÏîÄ¿Ãû³Æ	ÆÚÊı	ÏîÄ¿ÍÅ¶Ó	Ö°Ô±	ÏîÄ¿ĞÔÖÊ	¹ÜÀí·Ñ	Òµ¼¨±¨³ê
+//å…¥è´¦æ—¶é—´	é¡¹ç›®ä»£ç 	é¡¹ç›®åç§°	æœŸæ•°	é¡¹ç›®å›¢é˜Ÿ	èŒå‘˜	é¡¹ç›®æ€§è´¨	ç®¡ç†è´¹	ä¸šç»©æŠ¥é…¬
 class TableModel7 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÈëÕËÊ±¼ä","ÏîÄ¿´úÂë","ÏîÄ¿Ãû³Æ","ÆÚÊı","ÏîÄ¿ÍÅ¶Ó","Ö°Ô±","ÏîÄ¿ĞÔÖÊ","¹ÜÀí·Ñ","Òµ¼¨±¨³ê","·çÏÕ½ğ"};
+	static Object[] columnnames = new Object[]{"å…¥è´¦æ—¶é—´","é¡¹ç›®ä»£ç ","é¡¹ç›®åç§°","æœŸæ•°","é¡¹ç›®å›¢é˜Ÿ","èŒå‘˜","é¡¹ç›®æ€§è´¨","ç®¡ç†è´¹","ä¸šç»©æŠ¥é…¬","é£é™©é‡‘"};
 	public TableModel7(){
 		super(columnnames,0);
 	}
 }
 
-//ÈëÕËÊ±¼ä	ÏîÄ¿´úÂë	ÏîÄ¿Ãû³Æ	ÆÚÊı	ÏîÄ¿ÍÅ¶Ó	Ö°Ô±	ÏîÄ¿ĞÔÖÊ	ÏúÊÛ·şÎñ·Ñ
+//å…¥è´¦æ—¶é—´	é¡¹ç›®ä»£ç 	é¡¹ç›®åç§°	æœŸæ•°	é¡¹ç›®å›¢é˜Ÿ	èŒå‘˜	é¡¹ç›®æ€§è´¨	é”€å”®æœåŠ¡è´¹
 class TableModel8 extends DefaultTableModel{
-	static Object[] columnnames = new Object[]{"ÈëÕËÊ±¼ä","ÏîÄ¿´úÂë","ÏîÄ¿Ãû³Æ","ÆÚÊı","ÏîÄ¿ÍÅ¶Ó","Ö°Ô±","ÏîÄ¿ĞÔÖÊ","ÏúÊÛ·şÎñ·Ñ"};
+	static Object[] columnnames = new Object[]{"å…¥è´¦æ—¶é—´","é¡¹ç›®ä»£ç ","é¡¹ç›®åç§°","æœŸæ•°","é¡¹ç›®å›¢é˜Ÿ","èŒå‘˜","é¡¹ç›®æ€§è´¨","é”€å”®æœåŠ¡è´¹"};
 	public TableModel8(){
 		super(columnnames,0);
 	}

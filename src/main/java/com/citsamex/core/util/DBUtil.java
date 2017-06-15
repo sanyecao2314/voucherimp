@@ -13,7 +13,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * jdbc²Ù×÷Êı¾İ¿â¹¤¾ßÀà.
+ * jdbcæ“ä½œæ•°æ®åº“å·¥å…·ç±».
  * @author fans.fan
  *
  */
@@ -57,7 +57,7 @@ public class DBUtil {
     }
     
     /**
-     * Ö»ÓĞÒ»¸ö·µ»ØÖµµÄ²éÑ¯
+     * åªæœ‰ä¸€ä¸ªè¿”å›å€¼çš„æŸ¥è¯¢
      * @param sql
      * @return
      * @throws Exception
@@ -106,7 +106,7 @@ public class DBUtil {
         try {
             conn = ds.getConnection();
         } catch (SQLException e) {
-        	logger.error("Êı¾İ¿âÁ¬½Ó´íÎó:"+e);
+        	logger.error("æ•°æ®åº“è¿æ¥é”™è¯¯:"+e);
         	e.printStackTrace();
         }
         
@@ -115,7 +115,7 @@ public class DBUtil {
     
     
     /**
-     * ¹Ø±ÕÁ¬½Ó
+     * å…³é—­è¿æ¥
      * @param closeable
      */
     public static void close(AutoCloseable closeable){

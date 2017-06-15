@@ -38,15 +38,15 @@ public class VoucherEntryVO {
 	private String FJDetailID;
 
 	/**
-	 * ¸¨ÖúºËËãÏî:ÏúÊÛÉÌ
+	 * è¾…åŠ©æ ¸ç®—é¡¹:é”€å”®å•†
 	 */
 	private String Fxss;
 	/**
-	 * ·çÏÕ½ğ
+	 * é£é™©é‡‘
 	 */
 	private String fxj;
 	/**
-	 * ÊÇ·ñ¹ÜÀí·ÑÊÕÈë
+	 * æ˜¯å¦ç®¡ç†è´¹æ”¶å…¥
 	 */
 	private boolean glf;
 	

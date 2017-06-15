@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import org.apache.commons.dbcp.BasicDataSource;
 
 /**
- * 数据库连接参数类.
+ * 鏁版嵁搴撹繛鎺ュ弬鏁扮被.
  * @author fans.fan
  *
  */

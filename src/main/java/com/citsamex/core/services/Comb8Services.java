@@ -28,7 +28,7 @@ import com.citsamex.core.util.StringUtil;
 import com.citsamex.core.vo.VoucherEntryVO;
 
 /**
- *  COMBOVALUE8 = "¹«Ë¾ÏúÊÛ·şÎñ·Ñ»®²¦Ã÷Ï¸±í";
+ *  COMBOVALUE8 = "å…¬å¸é”€å”®æœåŠ¡è´¹åˆ’æ‹¨æ˜ç»†è¡¨";
  * @author fans.fan
  *
  */
@@ -36,8 +36,8 @@ public class Comb8Services extends SuperServices {
 	
 	public static ArrayList readXls(File file){
 		
-		HSSFWorkbook rwb = null;// ÉùÃ÷Ò»¸ö¹¤×÷²¾¡£
-		HSSFSheet sht = null;// ÉùÃ÷Ò»¸ö¹¤×÷±í¡£
+		HSSFWorkbook rwb = null;// å£°æ˜ä¸€ä¸ªå·¥ä½œç°¿ã€‚
+		HSSFSheet sht = null;// å£°æ˜ä¸€ä¸ªå·¥ä½œè¡¨ã€‚
 		HSSFRow row = null;
 
 		ArrayList voList = new ArrayList();
@@ -46,8 +46,8 @@ public class Comb8Services extends SuperServices {
 			rwb = new HSSFWorkbook(io);
 			sht = rwb.getSheetAt(0);
 			if (sht == null) {
-//				JOptionPane.showMessageDialog(this, "²»´æÔÚÒ³Ç©");
-				System.out.println("²»´æÔÚÒ³Ç©");
+//				JOptionPane.showMessageDialog(this, "ä¸å­˜åœ¨é¡µç­¾");
+				System.out.println("ä¸å­˜åœ¨é¡µç­¾");
 				return null;
 			}
 			String value = null;
@@ -72,9 +72,9 @@ public class Comb8Services extends SuperServices {
 	}
 	
 	/**
-	 * ×ª»»ÎÄ¼ş
+	 * è½¬æ¢æ–‡ä»¶
 	 * @param list 
-	 * "ÈÕÆÚ","»ù½ğ´úÂë","»ù½ğÃû³Æ","¹ÜÀí·Ñ»ã×Ü","ÍĞ¹Ü·Ñ","ÏúÊÛ·ÑÓÃ","±£Ö¤½ğ"
+	 * "æ—¥æœŸ","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","ç®¡ç†è´¹æ±‡æ€»","æ‰˜ç®¡è´¹","é”€å”®è´¹ç”¨","ä¿è¯é‡‘"
 	 * @return
 	 * @throws Exception 
 	 */
@@ -85,8 +85,8 @@ public class Comb8Services extends SuperServices {
 		
 		List voList = new ArrayList();
 		List templist = null;
-		String jaccsubjid = getAccsubjid("1002.01.01.04");		//ÒøĞĞ´æ¿î
-		String daccsubjid = getAccsubjid("6022.03");		//×¨»§
+		String jaccsubjid = getAccsubjid("1002.01.01.04");		//é“¶è¡Œå­˜æ¬¾
+		String daccsubjid = getAccsubjid("6022.03");		//ä¸“æˆ·
 		String userid = getUserId(mainUI.usernameTextField.getText());
 		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -95,7 +95,7 @@ public class Comb8Services extends SuperServices {
 		for(int i = 0;i<list.size();i++){
 			String[] str = (String[]) list.get(i);
 			
-			//Ğ£ÑéÒµÎñÆÚ¼ä.
+			//æ ¡éªŒä¸šåŠ¡æœŸé—´.
 			Date date = df.parse(str[0]);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
@@ -103,23 +103,23 @@ public class Comb8Services extends SuperServices {
 			int month = calendar.get(Calendar.MONTH) + 1;
 			checkYearAndMonth(year, month);
 			
-			//¼ì²éµÚÒ»¸ö¸¨ÖúºËËãÏî	¹¤³ÌÏîÄ¿
+			//æ£€æŸ¥ç¬¬ä¸€ä¸ªè¾…åŠ©æ ¸ç®—é¡¹	å·¥ç¨‹é¡¹ç›®
 			sql = "select FItemID from t_item where fnumber = '" + str[1] + "' and FItemClassID=2039";
 			projectId = getFItemID(sql, str[1]);
-			//¼ì²éµÚÒ»¸ö¸¨ÖúºËËãÏî	²¿ÃÅ			
+			//æ£€æŸ¥ç¬¬ä¸€ä¸ªè¾…åŠ©æ ¸ç®—é¡¹	éƒ¨é—¨			
 			sql = "select FItemID from t_item where fnumber = '" + str[4] + "'  and FItemClassID=2";
 			deptid = getFItemID(sql, str[4]);
-			//¼ì²éµÚÈı¸ö¸¨ÖúºËËãÏî	Ö°Ô±
+			//æ£€æŸ¥ç¬¬ä¸‰ä¸ªè¾…åŠ©æ ¸ç®—é¡¹	èŒå‘˜
 			sql = "select FItemID from t_item where fnumber = '"+str[5]+"' and FItemClassID=3";
 			empid = getFItemID(sql, str[5]);
 			
-			//´û·½¿ÆÄ¿£ºÖ÷ÓªÒµÎñÊÕÈë/¹ÜÀí·ÑÊÕÈë/×¨»§¹ÜÀí·ÑÊÕÈë		2²¿ÃÅ 3Ö°Ô±2039¹¤³ÌÏîÄ¿
+			//è´·æ–¹ç§‘ç›®ï¼šä¸»è¥ä¸šåŠ¡æ”¶å…¥/ç®¡ç†è´¹æ”¶å…¥/ä¸“æˆ·ç®¡ç†è´¹æ”¶å…¥		2éƒ¨é—¨ 3èŒå‘˜2039å·¥ç¨‹é¡¹ç›®
 			sql = "select  min(FDetailID) as FDetailID from t_ItemDetail where FDetailCount=3 and F2=" + deptid + " and F3=" + empid + " and F2039=" + projectId;
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1 && ((HashMap)templist.get(0)).get("FDetailID") != null){
 				fDetailID = ((HashMap)templist.get(0)).get("FDetailID").toString();
 			} else {
-				//Ã»ÓĞ¸¨ÖúºËËãĞÅÏ¢.²åÈët_ItemDetailºÍt_ItemDetailV±í¸¨ÖúºËËãĞÅÏ¢.
+				//æ²¡æœ‰è¾…åŠ©æ ¸ç®—ä¿¡æ¯.æ’å…¥t_ItemDetailå’Œt_ItemDetailVè¡¨è¾…åŠ©æ ¸ç®—ä¿¡æ¯.
 				Object  maxFDetailID = DBUtil.querySqlUniqueResult("select max(FDetailID)+1 from t_ItemDetail ");
 				String insertItemDetail = "insert into t_ItemDetail(FDetailID,FDetailCount,F1,F2,F3,F4,F5,F8,F9,F10,F14,F2001,F2002,F2003,F2004,F2014,F2023,F2021,F2024,F2026,F2027,F2028,F2029,F2030,F2035,F2036,F2039,F2040,F2041) "
 					+ "values ("+maxFDetailID+",3,0,"+deptid+","+empid+",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+ projectId +",0,0)";
@@ -142,7 +142,7 @@ public class Comb8Services extends SuperServices {
 				voucherEntryvo.setFPeriod(String.valueOf(month));
 				voucherEntryvo.setFDay(str[0]);
 				voucherEntryvo.setFPreparerID(userid);
-				voucherEntryvo.setFExplanation(str[2] + "ÏúÊÛ·şÎñ·ÑÊÕÈë");
+				voucherEntryvo.setFExplanation(str[2] + "é”€å”®æœåŠ¡è´¹æ”¶å…¥");
 				voucherEntryvo.setJAccountID(jaccsubjid);
 				voucherEntryvo.setDAccountID(daccsubjid);
 				voucherEntryvo.setFJDetailID("0");
@@ -156,7 +156,7 @@ public class Comb8Services extends SuperServices {
 	}
 	
 	/**
-	 * µ¼ÈëÊı¾İµ½K3ÏµÍ³.
+	 * å¯¼å…¥æ•°æ®åˆ°K3ç³»ç»Ÿ.
 	 * @param volist
 	 * @return
 	 * @throws Exception
@@ -178,9 +178,9 @@ public class Comb8Services extends SuperServices {
 			String dvoucherentrySql1 = null;
 			String dvoucherentrySql2 = null;
 			
-			//Æ¾Ö¤ID.
+			//å‡­è¯ID.
 			int initFVoucherID = Integer.parseInt(DBUtil.querySqlUniqueResult("select FMaxNum+1 from icmaxnum where FTableName='t_voucher'").toString());
-			//Æ¾Ö¤ºÅ
+			//å‡­è¯å·
 			VoucherEntryVO vevo = (VoucherEntryVO) volist.get(0);
 			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+vevo.getFYear()+" and FPeriod="+vevo.getFPeriod());
 			int initfnumber = Integer.parseInt(obj == null ? "1":obj.toString());
@@ -209,7 +209,7 @@ public class Comb8Services extends SuperServices {
 						+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + vevo.getFYear() + "," + vevo.getFPeriod() + ",1," + fnumber + ",null,'"+vevo.getFExplanation()+"',0,3," + amount + "," + amount + ",null,0,0," + vevo.getFPreparerID() + ",-1,-1,-1,null,0,null,null,123,0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 				stat.addBatch(voucherSql);
 				
-				//¸üĞÂÅäÖÃ±í
+				//æ›´æ–°é…ç½®è¡¨
 				String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
 				stat.addBatch(updateSql);
 			}
@@ -227,7 +227,7 @@ public class Comb8Services extends SuperServices {
 	}
 
 	private String getFAccountID() throws Exception{
-		//  Ó¦¸¶Ë°½ğ-Ó¦½»ÔöÖµË°-ÏúÏîË°
+		//  åº”ä»˜ç¨é‡‘-åº”äº¤å¢å€¼ç¨-é”€é¡¹ç¨
 		return getAccsubjid("2221.04.02");
 	}
 

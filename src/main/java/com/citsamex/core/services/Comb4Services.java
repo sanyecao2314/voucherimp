@@ -26,7 +26,7 @@ import com.citsamex.core.util.ExcelUtil;
 import com.citsamex.core.vo.VoucherEntryVO;
 
 /**
- * COMBOVALUE4 = "Î²ËæÓ¶½ğ»ã×Ü±í_±ÈÀı";
+ * COMBOVALUE4 = "å°¾éšä½£é‡‘æ±‡æ€»è¡¨_æ¯”ä¾‹";
  * @author fans.fan
  *
  */
@@ -34,8 +34,8 @@ public class Comb4Services extends SuperServices {
 	
 	public static ArrayList readXls(File file){
 		
-		HSSFWorkbook rwb = null;// ÉùÃ÷Ò»¸ö¹¤×÷²¾¡£
-		HSSFSheet sht = null;// ÉùÃ÷Ò»¸ö¹¤×÷±í¡£
+		HSSFWorkbook rwb = null;// å£°æ˜ä¸€ä¸ªå·¥ä½œç°¿ã€‚
+		HSSFSheet sht = null;// å£°æ˜ä¸€ä¸ªå·¥ä½œè¡¨ã€‚
 		HSSFRow row = null;
 
 		ArrayList voList = new ArrayList();
@@ -44,15 +44,15 @@ public class Comb4Services extends SuperServices {
 			rwb = new HSSFWorkbook(io);
 			sht = rwb.getSheetAt(0);
 			if (sht == null) {
-//				JOptionPane.showMessageDialog(this, "²»´æÔÚÒ³Ç©");
-				System.out.println("²»´æÔÚÒ³Ç©");
+//				JOptionPane.showMessageDialog(this, "ä¸å­˜åœ¨é¡µç­¾");
+				System.out.println("ä¸å­˜åœ¨é¡µç­¾");
 				return null;
 			}
 			String value = null;
 			for (int i = 7, rows = sht.getLastRowNum(); i < rows; i++) {
 				row = sht.getRow(i);
 				value = ExcelUtil.getCellValue(row.getCell(12));
-				if (value != null && value.contains("»ù½ğ´úÂë")) {
+				if (value != null && value.contains("åŸºé‡‘ä»£ç ")) {
 					continue;
 				}else if(value == null || "".equals(value.trim())){
 					continue;
@@ -79,9 +79,9 @@ public class Comb4Services extends SuperServices {
 	
 
 	/**
-	 * ×ª»»ÎÄ¼ş
+	 * è½¬æ¢æ–‡ä»¶
 	 * @param list 
-	 * ÏúÊÛÉÌ				»ù½ğ´úÂë			»ù½ğÃû³Æ				ÍĞ¹Ü½ğ¶îÀÛ¼Æ							ÍĞ¹Ü·İ¶îÀÛ¼Æ						Æ½¾ùÍĞ¹Ü½ğ¶î					Î²ËæÓ¶½ğ			
+	 * é”€å”®å•†				åŸºé‡‘ä»£ç 			åŸºé‡‘åç§°				æ‰˜ç®¡é‡‘é¢ç´¯è®¡							æ‰˜ç®¡ä»½é¢ç´¯è®¡						å¹³å‡æ‰˜ç®¡é‡‘é¢					å°¾éšä½£é‡‘			
 	 * @return
 	 * @throws Exception 
 	 */
@@ -96,7 +96,7 @@ public class Comb4Services extends SuperServices {
 		String daccsubjid = getAccsubjid("2202.01");
 		String userid = getUserId(mainUI.usernameTextField.getText());
 		
-		//Ğ£ÑéÒµÎñÆÚ¼ä.
+		//æ ¡éªŒä¸šåŠ¡æœŸé—´.
 		int year = Integer.parseInt(mainUI.yearComboBox.getSelectedItem().toString());
 		int month = Integer.parseInt(mainUI.monthComboBox.getSelectedItem().toString());
 		checkYearAndMonth(year, month);
@@ -108,23 +108,23 @@ public class Comb4Services extends SuperServices {
 			if(Double.parseDouble(str[6].replaceAll(",", "")) == 0.0d) continue;
 			
 			VoucherEntryVO voucherEntryvo = new VoucherEntryVO();
-			//¼ì²éµÚÒ»¸ö¸¨ÖúºËËãÏî	ÏúÊÛÉÌ			
+			//æ£€æŸ¥ç¬¬ä¸€ä¸ªè¾…åŠ©æ ¸ç®—é¡¹	é”€å”®å•†			
 			String sql = "select FItemID from t_item where FItemClassID=8 and fnumber like '%" + str[0] + "' and fname like '%"+str[1]+"%' ";
 			voucherEntryvo.setFxss(getFItemID(sql, str[0]));
-			//¼ì²éµÚ¶ş¸ö¸¨ÖúºËËãÏî	»ù½ğ´úÂë
+			//æ£€æŸ¥ç¬¬äºŒä¸ªè¾…åŠ©æ ¸ç®—é¡¹	åŸºé‡‘ä»£ç 
 			sql = "select FItemID from t_item where fnumber like '%" + str[2] + "'";
 			voucherEntryvo.setProject(getFItemID(sql, str[2]));
-			//¼ì²éµÚÈı¸ö¸¨ÖúºËËãÏî	²¿ÃÅ
+			//æ£€æŸ¥ç¬¬ä¸‰ä¸ªè¾…åŠ©æ ¸ç®—é¡¹	éƒ¨é—¨
 			sql = "select FItemID from t_item where fnumber = '04.001' and FItemClassID=2";
 			deptid = getFItemID(sql, "04.001");
 			
-			//½è·½¿ÆÄ¿£º¹ÜÀí·ÑÓÃ/ÊĞ³¡ÓªÏú¿ªÖ§/Î²ËæÓ¶½ğ		F2²¿ÃÅ/F8¹©Ó¦ÉÌ/F2039¹¤³ÌÏîÄ¿
+			//å€Ÿæ–¹ç§‘ç›®ï¼šç®¡ç†è´¹ç”¨/å¸‚åœºè¥é”€å¼€æ”¯/å°¾éšä½£é‡‘		F2éƒ¨é—¨/F8ä¾›åº”å•†/F2039å·¥ç¨‹é¡¹ç›®
 			sql = "select FDetailID from t_ItemDetail where FDetailCount=3 and F2="+deptid+" and F8=" + voucherEntryvo.getFxss() + "and F2039=" + voucherEntryvo.getProject();
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFJDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 			}else if(templist == null || templist.size() == 0){
-				//Ã»ÓĞ¸¨ÖúºËËãĞÅÏ¢.²åÈët_ItemDetailºÍt_ItemDetailV±í¸¨ÖúºËËãĞÅÏ¢.
+				//æ²¡æœ‰è¾…åŠ©æ ¸ç®—ä¿¡æ¯.æ’å…¥t_ItemDetailå’Œt_ItemDetailVè¡¨è¾…åŠ©æ ¸ç®—ä¿¡æ¯.
 				Object  maxFDetailID = DBUtil.querySqlUniqueResult("select max(FDetailID)+1 from t_ItemDetail ");
 				String insertItemDetail = "insert into t_ItemDetail(FDetailID,FDetailCount,F1,F2,F3,F4,F5,F8,F9,F10,F14,F2001,F2002,F2003,F2004,F2014,F2023,F2021,F2024,F2026,F2027,F2028,F2029,F2030,F2035,F2036,F2039,F2040,F2041) "
 					+ "values ("+maxFDetailID+",3,0,"+deptid+",0,0,0,"+voucherEntryvo.getFxss()+",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+voucherEntryvo.getProject()+",0,0)";
@@ -140,16 +140,16 @@ public class Comb4Services extends SuperServices {
 				DBUtil.excuteUpdate(insertItemDetailV);
 				voucherEntryvo.setFJDetailID(maxFDetailID.toString());
 			}else{
-				throw new Exception("²éÑ¯¸¨ÖúºËËãÏîÄ¿Òì³£.ÇëÖ´ĞĞsql¼ì²é:" + sql);
+				throw new Exception("æŸ¥è¯¢è¾…åŠ©æ ¸ç®—é¡¹ç›®å¼‚å¸¸.è¯·æ‰§è¡Œsqlæ£€æŸ¥:" + sql);
 			}
 			
-			//´û·½¿ÆÄ¿£ºÓ¦¸¶ÕË¿î/Î²ËæÓ¶½ğ		¸¨ÖúºËËãÏîÄ¿ÊÇÏúÊÛÉÌ
+			//è´·æ–¹ç§‘ç›®ï¼šåº”ä»˜è´¦æ¬¾/å°¾éšä½£é‡‘		è¾…åŠ©æ ¸ç®—é¡¹ç›®æ˜¯é”€å”®å•†
 			sql = "select FDetailID from t_ItemDetail where FDetailCount=1 and F8=" + voucherEntryvo.getFxss();
 			templist = DBUtil.querySql(sql);
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFDDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 			}else if(templist == null || templist.size() == 0){
-				//Ã»ÓĞ¸¨ÖúºËËãĞÅÏ¢.²åÈët_ItemDetailºÍt_ItemDetailV±í¸¨ÖúºËËãĞÅÏ¢.
+				//æ²¡æœ‰è¾…åŠ©æ ¸ç®—ä¿¡æ¯.æ’å…¥t_ItemDetailå’Œt_ItemDetailVè¡¨è¾…åŠ©æ ¸ç®—ä¿¡æ¯.
 				Object  maxFDetailID = DBUtil.querySqlUniqueResult("select max(FDetailID)+1 from t_ItemDetail ");
 				String insertItemDetail = "insert into t_ItemDetail(FDetailID,FDetailCount,F1,F2,F3,F4,F5,F8,F9,F10,F14,F2001,F2002,F2003,F2004,F2014,F2023,F2021,F2024,F2026,F2027,F2028,F2029,F2030,F2035,F2036,F2039,F2040,F2041) "
 					+ "values ("+maxFDetailID+",1,0,0,0,0,0,"+voucherEntryvo.getFxss()+",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)";
@@ -159,28 +159,28 @@ public class Comb4Services extends SuperServices {
 				DBUtil.excuteUpdate(insertItemDetailV);
 				voucherEntryvo.setFDDetailID(maxFDetailID.toString());
 			}else{
-				throw new Exception("²éÑ¯¸¨ÖúºËËãÏîÄ¿Òì³£.ÇëÖ´ĞĞsql¼ì²é:" + sql);
+				throw new Exception("æŸ¥è¯¢è¾…åŠ©æ ¸ç®—é¡¹ç›®å¼‚å¸¸.è¯·æ‰§è¡Œsqlæ£€æŸ¥:" + sql);
 			}
 			
 			voucherEntryvo.setFYear(String.valueOf(year));
 			voucherEntryvo.setFPeriod(String.valueOf(month));
 			voucherEntryvo.setFPreparerID(userid);
-			voucherEntryvo.setFExplanation("¼ÆÌá" + month + "ÔÂÎ²ËæÓ¶½ğ");
+			voucherEntryvo.setFExplanation("è®¡æ" + month + "æœˆå°¾éšä½£é‡‘");
 			voucherEntryvo.setJAccountID(jaccsubjid);
 			voucherEntryvo.setDAccountID(daccsubjid);
-			//str[6]´«ÈëµÄÊÇ¼ÛË°ºÏ¼Æ,ÏµÍ³ÒªÊÇµÄ²»º¬Ë°¼Û¸ñ ²»º¬Ë°¼Û¸ñ=¼ÛË°ºÏ¼Æ/1.06*0.06
+			//str[6]ä¼ å…¥çš„æ˜¯ä»·ç¨åˆè®¡,ç³»ç»Ÿè¦æ˜¯çš„ä¸å«ç¨ä»·æ ¼ ä¸å«ç¨ä»·æ ¼=ä»·ç¨åˆè®¡/1.06*0.06
 			voucherEntryvo.setFAmount(new BigDecimal(str[6].replaceAll(",","")).subtract(new BigDecimal(str[6].replaceAll(",","")).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4)).toString());
 			voList.add(voucherEntryvo);
 		}
 		
 		if (voList == null || voList.isEmpty()) {
-			mainUI.remark.setText("Ã»ÓĞĞèÒªµ¼ÈëµÄÊı¾İ.");
+			mainUI.remark.setText("æ²¡æœ‰éœ€è¦å¯¼å…¥çš„æ•°æ®.");
 		}
 		return voList;
 	}
 	
 	/**
-	 * µ¼ÈëÊı¾İµ½K3ÏµÍ³.
+	 * å¯¼å…¥æ•°æ®åˆ°K3ç³»ç»Ÿ.
 	 * @param volist
 	 * @return
 	 * @throws Exception
@@ -203,9 +203,9 @@ public class Comb4Services extends SuperServices {
 			String jvoucherentrySql = null;
 			String dvoucherentrySql = null;
 			
-			//Æ¾Ö¤ID.
+			//å‡­è¯ID.
 			int FVoucherID = Integer.parseInt(DBUtil.querySqlUniqueResult("select FMaxNum+1 from icmaxnum where FTableName='t_voucher'").toString());
-			//Æ¾Ö¤ºÅ
+			//å‡­è¯å·
 			VoucherEntryVO tempvo = (VoucherEntryVO) volist.get(0);
 			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+tempvo.getFYear()+" and FPeriod="+tempvo.getFPeriod());
 			int fnumber = Integer.parseInt(obj == null ? "1":obj.toString());
@@ -228,7 +228,7 @@ public class Comb4Services extends SuperServices {
 				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'" + tempvo.getFExplanation() + "',0,2," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null," + fnumber + ",0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 			stat.execute(voucherSql);
 
-			//¸üĞÂÅäÖÃ±í
+			//æ›´æ–°é…ç½®è¡¨
 			String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
 			stat.execute(updateSql);
 			

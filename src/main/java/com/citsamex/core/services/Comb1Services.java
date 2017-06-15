@@ -27,7 +27,7 @@ import com.citsamex.core.vo.NoFundException;
 import com.citsamex.core.vo.VoucherEntryVO;
 
 /**
- * COMBOVALUE1 = "¹«Ä¼»ù½ğ·ÑÓÃ±í";
+ * COMBOVALUE1 = "å…¬å‹ŸåŸºé‡‘è´¹ç”¨è¡¨";
  * @author fans.fan
  *
  */
@@ -35,8 +35,8 @@ public class Comb1Services extends SuperServices{
 	
 	public static ArrayList readXls(File file){
 		
-		HSSFWorkbook rwb = null;// ÉùÃ÷Ò»¸ö¹¤×÷²¾¡£
-		HSSFSheet sht = null;// ÉùÃ÷Ò»¸ö¹¤×÷±í¡£
+		HSSFWorkbook rwb = null;// å£°æ˜ä¸€ä¸ªå·¥ä½œç°¿ã€‚
+		HSSFSheet sht = null;// å£°æ˜ä¸€ä¸ªå·¥ä½œè¡¨ã€‚
 		HSSFRow row = null;
 
 		ArrayList voList = new ArrayList();
@@ -45,15 +45,15 @@ public class Comb1Services extends SuperServices{
 			rwb = new HSSFWorkbook(io);
 			sht = rwb.getSheetAt(0);
 			if (sht == null) {
-//				JOptionPane.showMessageDialog(this, "²»´æÔÚÒ³Ç©");
-				System.out.println("²»´æÔÚÒ³Ç©");
+//				JOptionPane.showMessageDialog(this, "ä¸å­˜åœ¨é¡µç­¾");
+				System.out.println("ä¸å­˜åœ¨é¡µç­¾");
 				return null;
 			}
 			String value = null;
 			for (int i = 4, rows = sht.getLastRowNum(); i < rows; i++) {
 				row = sht.getRow(i);
 				value = ExcelUtil.getCellValue(row.getCell(0));
-				if (value != null && value.contains("ºÏ")) {
+				if (value != null && value.contains("åˆ")) {
 					break;
 				}
 //				CombVO1 vo = new CombVO1();
@@ -79,9 +79,9 @@ public class Comb1Services extends SuperServices{
 	
 	
 	/**
-	 * ×ª»»ÎÄ¼ş
+	 * è½¬æ¢æ–‡ä»¶
 	 * @param list 
-	 * "ÈÕÆÚ","»ù½ğ´úÂë","»ù½ğÃû³Æ","¹ÜÀí·Ñ»ã×Ü","ÍĞ¹Ü·Ñ","ÏúÊÛ·ÑÓÃ","±£Ö¤½ğ"
+	 * "æ—¥æœŸ","åŸºé‡‘ä»£ç ","åŸºé‡‘åç§°","ç®¡ç†è´¹æ±‡æ€»","æ‰˜ç®¡è´¹","é”€å”®è´¹ç”¨","ä¿è¯é‡‘"
 	 * @return
 	 * @throws Exception 
 	 */
@@ -92,14 +92,14 @@ public class Comb1Services extends SuperServices{
 		
 		List voList = new ArrayList();
 		List templist = null;
-		//Ó¦ÊÕ¹ÜÀí·Ñ
+		//åº”æ”¶ç®¡ç†è´¹
 		String jaccsubjid = getAccsubjid("1122.01");
-		//Ö¤È¯Í¶×Ê»ù½ğ
+		//è¯åˆ¸æŠ•èµ„åŸºé‡‘
 		String daccsubjid = getAccsubjid("6001.01.01");
 		String userid = getUserId(mainUI.usernameTextField.getText());
 		
 		
-		//Ğ£ÑéÒµÎñÆÚ¼ä.
+		//æ ¡éªŒä¸šåŠ¡æœŸé—´.
 		int year = Integer.parseInt(mainUI.yearComboBox.getSelectedItem().toString());
 		int month = Integer.parseInt(mainUI.monthComboBox.getSelectedItem().toString());
 		checkYearAndMonth(year, month);
@@ -118,7 +118,7 @@ public class Comb1Services extends SuperServices{
 			if(templist != null && templist.size() == 1){
 				voucherEntryvo.setFDetailID(((HashMap)templist.get(0)).get("FDetailID").toString());
 			}else if(templist == null || templist.size() == 0){
-				//Ã»ÓĞ¸¨ÖúºËËãĞÅÏ¢.²åÈët_ItemDetailºÍt_ItemDetailV±í¸¨ÖúºËËãĞÅÏ¢.
+				//æ²¡æœ‰è¾…åŠ©æ ¸ç®—ä¿¡æ¯.æ’å…¥t_ItemDetailå’Œt_ItemDetailVè¡¨è¾…åŠ©æ ¸ç®—ä¿¡æ¯.
 				Object  maxFDetailID = DBUtil.querySqlUniqueResult("select max(FDetailID)+1 from t_ItemDetail ");
 				String insertItemDetail = "insert into t_ItemDetail(FDetailID,FDetailCount,F1,F2,F3,F4,F5,F8,F9,F10,F14,F2001,F2002,F2003,F2004,F2014,F2023,F2021,F2024,F2026,F2027,F2028,F2029,F2030,F2035,F2036,F2039,F2040,F2041) "
 					+ "values ("+maxFDetailID+",1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+voucherEntryvo.getProject()+",0,0)";
@@ -128,7 +128,7 @@ public class Comb1Services extends SuperServices{
 				DBUtil.excuteUpdate(insertItemDetailV);
 				voucherEntryvo.setFDetailID(maxFDetailID.toString());
 			}else{
-				throw new Exception("²éÑ¯¸¨ÖúºËËãÏîÄ¿Òì³£.ÇëÖ´ĞĞsql¼ì²é:" + sql);
+				throw new Exception("æŸ¥è¯¢è¾…åŠ©æ ¸ç®—é¡¹ç›®å¼‚å¸¸.è¯·æ‰§è¡Œsqlæ£€æŸ¥:" + sql);
 			}
 			voucherEntryvo.setFYear(String.valueOf(year));
 			voucherEntryvo.setFPeriod(String.valueOf(month));
@@ -144,7 +144,7 @@ public class Comb1Services extends SuperServices{
 	}
 	
 	/**
-	 * µ¼ÈëÊı¾İµ½K3ÏµÍ³.
+	 * å¯¼å…¥æ•°æ®åˆ°K3ç³»ç»Ÿ.
 	 * @param volist
 	 * @return
 	 * @throws Exception
@@ -166,9 +166,9 @@ public class Comb1Services extends SuperServices{
 			String dvoucherentrySql1 = null;
 			String dvoucherentrySql2 = null;
 			
-			//Æ¾Ö¤ID.
+			//å‡­è¯ID.
 			int FVoucherID = Integer.parseInt(DBUtil.querySqlUniqueResult("select FMaxNum+1 from icmaxnum where FTableName='t_voucher'").toString());
-			//Æ¾Ö¤ºÅ
+			//å‡­è¯å·
 			VoucherEntryVO tempvo = (VoucherEntryVO) volist.get(0);
 			Object obj = DBUtil.querySqlUniqueResult("select max(fnumber)+1 from t_voucher where FYear= "+tempvo.getFYear()+" and FPeriod="+tempvo.getFPeriod());
 			int fnumber = Integer.parseInt(obj == null ? "1":obj.toString());
@@ -179,11 +179,11 @@ public class Comb1Services extends SuperServices{
 				BigDecimal taxAmount = new BigDecimal(vevo.getFAmount()).multiply(new BigDecimal(0.06)).divide(new BigDecimal(1.06), 2, 4);
 				BigDecimal tempAmount = new BigDecimal(vevo.getFAmount()).subtract(taxAmount);
 				jvoucherentrySql = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+i*3+",'¼ÆÌá" + vevo.getFPeriod() + "ÔÂ¹«Ä¼»ù½ğ¹ÜÀí·ÑÊÕÈë'," + vevo.getJAccountID() + "," + vevo.getFDetailID() + ",1,1,1," + vevo.getFAmount() + "," + vevo.getFAmount() + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+1)+")";
+					+ "values(0," + FVoucherID + ","+i*3+",'è®¡æ" + vevo.getFPeriod() + "æœˆå…¬å‹ŸåŸºé‡‘ç®¡ç†è´¹æ”¶å…¥'," + vevo.getJAccountID() + "," + vevo.getFDetailID() + ",1,1,1," + vevo.getFAmount() + "," + vevo.getFAmount() + ",0,0,0,null," + vevo.getDAccountID() + ",0,null,null,0,0,0,1,"+(i*3+1)+")";
 				dvoucherentrySql1 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-					+ "values(0," + FVoucherID + ","+(i*3+1)+",'¼ÆÌá" + vevo.getFPeriod() + "ÔÂ¹«Ä¼»ù½ğ¹ÜÀí·ÑÊÕÈë'," + getAccsubjid("2221.04.02") + ",0,1,1,0," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+ (i*3) +");";
+					+ "values(0," + FVoucherID + ","+(i*3+1)+",'è®¡æ" + vevo.getFPeriod() + "æœˆå…¬å‹ŸåŸºé‡‘ç®¡ç†è´¹æ”¶å…¥'," + getAccsubjid("2221.04.02") + ",0,1,1,0," + taxAmount + "," + taxAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+ (i*3) +");";
 				dvoucherentrySql2 = "insert into t_VoucherEntry(FBrNo,FVoucherID,FEntryID,FExplanation,FAccountID,FDetailID,FCurrencyID,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FTransNo,FCashFlowItem,FTaskID,FResourceID,FExchangeRateType,FSideEntryID) "
-						+ "values(0," + FVoucherID + ","+(i*3+2)+",'¼ÆÌá" + vevo.getFPeriod() + "ÔÂ¹«Ä¼»ù½ğ¹ÜÀí·ÑÊÕÈë'," + vevo.getDAccountID() + "," + vevo.getFDetailID() + ",1,1,0," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+(i*3)+");";
+						+ "values(0," + FVoucherID + ","+(i*3+2)+",'è®¡æ" + vevo.getFPeriod() + "æœˆå…¬å‹ŸåŸºé‡‘ç®¡ç†è´¹æ”¶å…¥'," + vevo.getDAccountID() + "," + vevo.getFDetailID() + ",1,1,0," + tempAmount + "," + tempAmount + ",0,0,0,null," + vevo.getJAccountID() + ",0,null,null,0,0,0,1,"+(i*3)+");";
 				amount = amount.add(new BigDecimal(vevo.getFAmount()));
 				stat.execute(jvoucherentrySql);
 				stat.execute(dvoucherentrySql1);
@@ -192,11 +192,11 @@ public class Comb1Services extends SuperServices{
 
 			String dateStr = DateUtil.getDateStr(tempvo.getFYear(), tempvo.getFPeriod());
 			voucherSql = "insert into t_Voucher(FBrNo,FVoucherID,FDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,	FPosterID,FCashierID,	FHandler,FOwnerGroupID,FObjectName,FParameter,FSerialNum,FTranType,FTransDate,FFrameWorkID,FApproveID,FFootNote,UUID) "
-				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'¼ÆÌá" + tempvo.getFPeriod() + "ÔÂ¹«Ä¼»ù½ğ¹ÜÀí·ÑÊÕÈë',0,3," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null," + fnumber + ",0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
+				+ "values (0," + FVoucherID + ",'" + dateStr + " 00:00:00.000'," + tempvo.getFYear() + "," + tempvo.getFPeriod() + ",1," + fnumber + ",null,'è®¡æ" + tempvo.getFPeriod() + "æœˆå…¬å‹ŸåŸºé‡‘ç®¡ç†è´¹æ”¶å…¥',0,3," + amount + "," + amount + ",null,0,0," + tempvo.getFPreparerID() + ",-1,-1,-1,null,0,null,null," + fnumber + ",0,'" + dateStr + " 00:00:00.000',	-1,	-1,'','"+UUID.randomUUID()+"')";
 			System.out.println(voucherSql);
 			stat.execute(voucherSql);
 
-			//¸üĞÂÅäÖÃ±í
+			//æ›´æ–°é…ç½®è¡¨
 			String updateSql = "update icmaxnum set FMaxNum="+FVoucherID+" where FTableName='t_voucher'" ;
 			stat.execute(updateSql);
 			

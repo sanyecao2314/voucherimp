@@ -1,7 +1,7 @@
 package com.citsamex.core.vo;
 
 /**
- * δ�ҵ�
+ * 未找到
  * 
  * @author fans.fan
  *

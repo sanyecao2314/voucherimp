@@ -1,13 +1,13 @@
 package com.citsamex.core.vo;
 
 /**
- * COMBOVALUE3 = "Î²ËæÓ¶½ğ»ã×Ü±í";
-	protected final static String COMBOVALUE1 = "¹«Ä¼»ù½ğ·ÑÓÃ±í";
-	protected final static String COMBOVALUE2 = "¹«Ë¾ÊÖĞø·ÑÊÕÈë»®²¦Ã÷Ï¸±í";
-	protected final static String COMBOVALUE3 = "Î²ËæÓ¶½ğ»ã×Ü±í";
-	protected final static String COMBOVALUE4 = "Î²ËæÓ¶½ğ»ã×Ü±í_±ÈÀı";
-	protected final static String COMBOVALUE5 = "Ö±ÏúÊÖĞø·ÑÃ÷Ï¸";
-	protected final static String COMBOVALUE6 = "×¨»§»ù½ğ·ÑÓÃ±í";
+ * COMBOVALUE3 = "å°¾éšä½£é‡‘æ±‡æ€»è¡¨";
+	protected final static String COMBOVALUE1 = "å…¬å‹ŸåŸºé‡‘è´¹ç”¨è¡¨";
+	protected final static String COMBOVALUE2 = "å…¬å¸æ‰‹ç»­è´¹æ”¶å…¥åˆ’æ‹¨æ˜ç»†è¡¨";
+	protected final static String COMBOVALUE3 = "å°¾éšä½£é‡‘æ±‡æ€»è¡¨";
+	protected final static String COMBOVALUE4 = "å°¾éšä½£é‡‘æ±‡æ€»è¡¨_æ¯”ä¾‹";
+	protected final static String COMBOVALUE5 = "ç›´é”€æ‰‹ç»­è´¹æ˜ç»†";
+	protected final static String COMBOVALUE6 = "ä¸“æˆ·åŸºé‡‘è´¹ç”¨è¡¨";
  * @author fans.fan
  *
  */

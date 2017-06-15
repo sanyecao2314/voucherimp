@@ -3,7 +3,7 @@ package com.citsamex.core.util;
 import java.util.ResourceBundle;
 
 /**
- * ÏîÄ¿²ÎÊı¹¤¾ßÀà
+ * é¡¹ç›®å‚æ•°å·¥å…·ç±»
  * 
  * @author zhangdaihao
  * 
@@ -13,7 +13,7 @@ public class ResourceUtil {
 	private static final ResourceBundle bundle = java.util.ResourceBundle.getBundle("config");
 
 	/**
-	 * »ñÈ¡
+	 * è·å–
 	 * 
 	 * @return
 	 */
