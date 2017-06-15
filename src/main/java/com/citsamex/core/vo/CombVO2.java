@@ -1,16 +1,16 @@
 package com.citsamex.core.vo;
 
 /**
- * COMBOVALUE2 = "��˾���������뻮����ϸ��";
-	protected final static String COMBOVALUE1 = "��ļ������ñ�";
-	protected final static String COMBOVALUE2 = "��˾���������뻮����ϸ��";
-	protected final static String COMBOVALUE3 = "β��Ӷ����ܱ�";
-	protected final static String COMBOVALUE4 = "β��Ӷ����ܱ�_����";
-	protected final static String COMBOVALUE5 = "ֱ����������ϸ";
-	protected final static String COMBOVALUE6 = "ר��������ñ�";
+ * COMBOVALUE2 = "公司手续费收入划拨明细表";
+	protected final static String COMBOVALUE1 = "公募基金费用表";
+	protected final static String COMBOVALUE2 = "公司手续费收入划拨明细表";
+	protected final static String COMBOVALUE3 = "尾随佣金汇总表";
+	protected final static String COMBOVALUE4 = "尾随佣金汇总表_比例";
+	protected final static String COMBOVALUE5 = "直销手续费明细";
+	protected final static String COMBOVALUE6 = "专户基金费用表";
  * @author fans.fan
- * ��������	�ϼ�	ֱ���Ϲ���	ֱ���깺��	ֱ����ط�	ֱ��ת����	
- * ֱ�������	ֱ�����۷����	��˾�Ϲ���	��˾�깺��	��˾��ط�	��˾ת����	��˾�����	��˾����깺��
+ * 基金名称	合计	直销认购费	直销申购费	直销赎回费	直销转换费	
+ * 直销补差费	直销销售服务费	公司认购费	公司申购费	公司赎回费	公司转换费	公司补差费	公司后端申购费
 
  */
 public class CombVO2 {

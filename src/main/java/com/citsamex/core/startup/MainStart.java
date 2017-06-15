@@ -36,11 +36,11 @@ public class MainStart extends AbstractStart {
 	}
 	
 	/**
-	 * 0 = ÏÂÀ­Ñ¡Ôñ.
-	 * 1 = Ñ¡ÔñÎÄ¼ş
-	 * 2 = ¶ÁÈ¡ÎÄ¼ş
-	 * 3 = ×ª»»ÎÄ¼ş
-	 * 4 = µ¼ÈëÎÄ¼ş
+	 * 0 = ä¸‹æ‹‰é€‰æ‹©.
+	 * 1 = é€‰æ‹©æ–‡ä»¶
+	 * 2 = è¯»å–æ–‡ä»¶
+	 * 3 = è½¬æ¢æ–‡ä»¶
+	 * 4 = å¯¼å…¥æ–‡ä»¶
 	 * 
 	 */
 	private int billstatus = 0;
@@ -48,19 +48,19 @@ public class MainStart extends AbstractStart {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == jComboBox){	//ÏÂÀ­Ñ¡ÔñÏî.
+		if(e.getSource() == jComboBox){	//ä¸‹æ‹‰é€‰æ‹©é¡¹.
 			onBOComboBox();
 			billstatus = 0;
 		}
-		else if (e.getSource() == chooseButton) {	//Ñ¡ÔñÎÄ¼ş.
+		else if (e.getSource() == chooseButton) {	//é€‰æ‹©æ–‡ä»¶.
 			if(chooseButtonKeyReleased() && onBOReadButton()){
 				billstatus = 2;
 				remark.setText(null);
 			}  
 		}
-//		else if(e.getSource() == readButton){	//¶ÁÈ¡ÎÄ¼ş
+//		else if(e.getSource() == readButton){	//è¯»å–æ–‡ä»¶
 //			if(billstatus != 1){
-//				JOptionPane.showMessageDialog(this, "ÇëÏÈÑ¡ÔñÎÄ¼ş!");
+//				JOptionPane.showMessageDialog(this, "è¯·å…ˆé€‰æ‹©æ–‡ä»¶!");
 //				return ;
 //			}
 //			
@@ -68,9 +68,9 @@ public class MainStart extends AbstractStart {
 //				billstatus = 2;
 //			}
 //		}
-		else if(e.getSource() == impButton){	//×ª»» µ¼Èë
+		else if(e.getSource() == impButton){	//è½¬æ¢ å¯¼å…¥
 			if(billstatus != 2){
-				JOptionPane.showMessageDialog(this, "ÇëÏÈÑ¡ÔñÎÄ¼ş!");
+				JOptionPane.showMessageDialog(this, "è¯·å…ˆé€‰æ‹©æ–‡ä»¶!");
 				return ;
 			}
 			remark.setText(null);
@@ -78,12 +78,12 @@ public class MainStart extends AbstractStart {
 				list = null;
 				volist = null;
 				billstatus = 4;
-				remark.setText("Êı¾İµ¼Èë³É¹¦.");
+				remark.setText("æ•°æ®å¯¼å…¥æˆåŠŸ.");
 			}
 		}
-//		else if(e.getSource() == impButton){	//µ¼Èë
+//		else if(e.getSource() == impButton){	//å¯¼å…¥
 //			if(billstatus != 3){
-//				JOptionPane.showMessageDialog(this, "ÇëÏÈ×ª»»ÎÄ¼ş!");
+//				JOptionPane.showMessageDialog(this, "è¯·å…ˆè½¬æ¢æ–‡ä»¶!");
 //				return ;
 //			}
 //			if(){
@@ -93,7 +93,7 @@ public class MainStart extends AbstractStart {
 	}
 	
 	/**
-	 * Ñ¡ÔñµÄµ¼ÈëÀàĞÍ·¢Éú±ä»¯Ê±,tablemodelËæÖ®±ä»¯.
+	 * é€‰æ‹©çš„å¯¼å…¥ç±»å‹å‘ç”Ÿå˜åŒ–æ—¶,tablemodeléšä¹‹å˜åŒ–.
 	 */
 	private void onBOComboBox(){
 		Object selecteditem = jComboBox.getSelectedItem();
@@ -116,21 +116,21 @@ public class MainStart extends AbstractStart {
 			defaultTableModel = new TableModel6();
 			dataTable.setModel(defaultTableModel);
 		}
-		//Çå¿ÕÌáÊ¾ĞÅÏ¢¿òÀïµÄĞÅÏ¢.
+		//æ¸…ç©ºæç¤ºä¿¡æ¯æ¡†é‡Œçš„ä¿¡æ¯.
 		remark.setText(null);
 	}
 	
 	ArrayList list = null;
 	/**
-	 * ¶ÁÈ¡ExcelÎÄ¼ş.
+	 * è¯»å–Excelæ–‡ä»¶.
 	 */
 	private boolean onBOReadButton(){
 		if (selectedFile == null ) {
-			JOptionPane.showMessageDialog(this, "ÇëÏÈÑ¡ÔñÎÄ¼ş!");
+			JOptionPane.showMessageDialog(this, "è¯·å…ˆé€‰æ‹©æ–‡ä»¶!");
 			return false;
 		}
 		
-		//É¾³ıÔ­ÓĞĞĞ.
+		//åˆ é™¤åŸæœ‰è¡Œ.
 		int rowcount = defaultTableModel.getRowCount();
 		for (; rowcount > 0; rowcount--) {
 			defaultTableModel.removeRow(rowcount);
@@ -168,12 +168,12 @@ public class MainStart extends AbstractStart {
 	List volist = null;
 	
 	/**
-	 * ×ª»»ÎÄ¼ş
+	 * è½¬æ¢æ–‡ä»¶
 	 * @return
 	 */
 	private boolean onBOConvertButton() {
 		if(list == null || list.size() == 0){
-			remark.setText("Ã»ÓĞĞèÒªµ¼ÈëµÄÊı¾İ.");
+			remark.setText("æ²¡æœ‰éœ€è¦å¯¼å…¥çš„æ•°æ®.");
 			return false;
 		}
 		
@@ -207,7 +207,7 @@ public class MainStart extends AbstractStart {
 	}
 	
 	/**
-	 * µ¼ÈëÊı¾İ
+	 * å¯¼å…¥æ•°æ®
 	 * @return
 	 */
 	private boolean onBOImpButton() {

@@ -7,7 +7,7 @@ import java.util.Calendar;
 public class DateUtil {
 
 	/**
-	 * 将界面选择的时间转换为业务系统需要的格式.
+	 * 灏嗙晫闈㈤�夋嫨鐨勬椂闂磋浆鎹负涓氬姟绯荤粺闇�瑕佺殑鏍煎紡.
 	 * 
 	 * @param year
 	 * @param month

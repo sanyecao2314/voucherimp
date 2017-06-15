@@ -8,7 +8,7 @@ import com.citsamex.core.util.DBUtil;
 public class SuperServices {
 
 	/**
-	 * ¸ù¾İ¿ÆÄ¿±àÂë,²éÑ¯¿ÆÄ¿Id
+	 * æ ¹æ®ç§‘ç›®ç¼–ç ,æŸ¥è¯¢ç§‘ç›®Id
 	 * 
 	 * @param accNumber
 	 * @return
@@ -21,13 +21,13 @@ public class SuperServices {
 		if(templist != null && templist.size() == 1){
 			accsubjid = ((HashMap)templist.get(0)).get("FAccountID").toString();
 		}else{
-			throw new RuntimeException("²éÑ¯¿ÆÄ¿Òì³£.ÇëÖ´ĞĞsql:" + sql);
+			throw new RuntimeException("æŸ¥è¯¢ç§‘ç›®å¼‚å¸¸.è¯·æ‰§è¡Œsql:" + sql);
 		}
 		return accsubjid;
 	}
 	
 	/**
-	 * »ñÈ¡¸¨ÖúºËËãÏîĞÅÏ¢.
+	 * è·å–è¾…åŠ©æ ¸ç®—é¡¹ä¿¡æ¯.
 	 * @param sql
 	 * @return
 	 * @throws Exception
@@ -37,21 +37,21 @@ public class SuperServices {
 		if(templist != null && templist.size() == 1){
 			return ((HashMap)templist.get(0)).get("FItemID").toString();
 		}else if(templist == null || templist.size() == 0){
-			throw new Exception("Î´ÕÒµ½±àÂë°üº¬" + fnumber + "µÄ¸¨ÖúºËËãÏîÄ¿!");
+			throw new Exception("æœªæ‰¾åˆ°ç¼–ç åŒ…å«" + fnumber + "çš„è¾…åŠ©æ ¸ç®—é¡¹ç›®!");
 		}else{
-			throw new Exception("²éÑ¯¸¨ÖúºËËãÏîÄ¿Òì³£.ÇëÖ´ĞĞsql¼ì²é:" + sql);
+			throw new Exception("æŸ¥è¯¢è¾…åŠ©æ ¸ç®—é¡¹ç›®å¼‚å¸¸.è¯·æ‰§è¡Œsqlæ£€æŸ¥:" + sql);
 		}
 	}
 	
 	/**
-	 * »ñÈ¡ÓÃ»§Id
+	 * è·å–ç”¨æˆ·Id
 	 * @param username
 	 * @return
 	 * @throws Exception
 	 */
 	public String getUserId(String username) throws Exception{
 		if(username == null || "".equals(username)){
-			throw new Exception("ÇëÌîĞ´ÓÃ»§Ãû!");
+			throw new Exception("è¯·å¡«å†™ç”¨æˆ·å!");
 		}
 		
 		String userid = "";
@@ -59,13 +59,13 @@ public class SuperServices {
 		if(templist != null && templist.size() == 1){
 			userid = ((HashMap)templist.get(0)).get("FUserID").toString();
 		}else{
-			throw new Exception("Î´²éµ½Ïà¹ØÓÃ»§ĞÅÏ¢,Çë¼ì²éÓÃ»§ÃûÊÇ·ñÕıÈ·!");
+			throw new Exception("æœªæŸ¥åˆ°ç›¸å…³ç”¨æˆ·ä¿¡æ¯,è¯·æ£€æŸ¥ç”¨æˆ·åæ˜¯å¦æ­£ç¡®!");
 		}
 		return userid;
 	}
 	
 	/**
-	 * Ğ£ÑéÒµÎñÆÚ¼ä
+	 * æ ¡éªŒä¸šåŠ¡æœŸé—´
 	 * 
 	 * @param year
 	 * @param month
@@ -76,13 +76,13 @@ public class SuperServices {
 		List templist = DBUtil.querySql(yearSql);
 		int sysyear = Integer.parseInt(((HashMap)templist.get(0)).get("FValue").toString());
 		if(year < sysyear){
-			throw new Exception("¸Ã²ÆÄêÒÑ½áÕË,ÇëÖØĞÂÑ¡ÔñÄê·İ!");
+			throw new Exception("è¯¥è´¢å¹´å·²ç»“è´¦,è¯·é‡æ–°é€‰æ‹©å¹´ä»½!");
 		}
 		String monthSql = "select FValue from t_systemprofile where FKey='currentperiod' and FCategory='FA'";
 		templist = DBUtil.querySql(monthSql);
 		int sysmonth = Integer.parseInt(((HashMap)templist.get(0)).get("FValue").toString());
 		if(month < sysmonth){
-			throw new Exception("¸Ã»á¼ÆÆÚ¼äÒÑ½áÕË,ÇëÖØĞÂÑ¡ÔñÔÂ·İ!");
+			throw new Exception("è¯¥ä¼šè®¡æœŸé—´å·²ç»“è´¦,è¯·é‡æ–°é€‰æ‹©æœˆä»½!");
 		}
 	}
 	

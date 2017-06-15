@@ -37,7 +37,7 @@ public class VoucherEntryVO {
 	private String FJDetailID;
 
 	/**
-	 * ¸¨ÖúºËËãÏî:ÏúÊÛÉÌ
+	 * è¾…åŠ©æ ¸ç®—é¡¹:é”€å”®å•†
 	 */
 	private String Fxss;
 	
