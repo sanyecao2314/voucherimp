@@ -13,6 +13,7 @@ import com.citsamex.core.services.Comb3Services;
 import com.citsamex.core.services.Comb4Services;
 import com.citsamex.core.services.Comb5Services;
 import com.citsamex.core.services.Comb6Services;
+import com.citsamex.core.services.Comb7Services;
 
 public class MainStart extends AbstractStart {
 
@@ -115,6 +116,9 @@ public class MainStart extends AbstractStart {
 		}else if(COMBOVALUE6.equals(selecteditem)){
 			defaultTableModel = new TableModel6();
 			dataTable.setModel(defaultTableModel);
+		}else if(COMBOVALUE7.equals(selecteditem)){
+			defaultTableModel = new TableModel3();
+			dataTable.setModel(defaultTableModel);
 		}
 		//清空提示信息框里的信息.
 		remark.setText(null);
@@ -154,6 +158,9 @@ public class MainStart extends AbstractStart {
 			list = comb5.readXls(selectedFile);
 		}else if(COMBOVALUE6.equals(selecteditem)){
 			Comb6Services comb6 = new Comb6Services();
+			list = comb6.readXls(selectedFile);
+		}else if(COMBOVALUE7.equals(selecteditem)){
+			Comb7Services comb6 = new Comb7Services();
 			list = comb6.readXls(selectedFile);
 		}
 		
@@ -234,6 +241,9 @@ public class MainStart extends AbstractStart {
 			} else if (COMBOVALUE6.equals(selecteditem)) {
 				Comb6Services comb6 = new Comb6Services();
 				int i = comb6.impVO2SysVoucher(volist, this);
+			} else if (COMBOVALUE7.equals(selecteditem)) {
+				Comb7Services comb7 = new Comb7Services();
+				int i = comb7.impVO2SysVoucher(volist, this);
 			}
 		} catch (Exception e) {
 			remark.setText(e.getMessage());
