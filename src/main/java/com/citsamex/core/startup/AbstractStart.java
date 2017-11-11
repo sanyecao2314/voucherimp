@@ -53,11 +53,11 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 
 	protected final static String COMBOVALUE1 = "公募基金费用表";
 	protected final static String COMBOVALUE2 = "公司手续费收入划拨明细表";
-	protected final static String COMBOVALUE3 = "尾随佣金汇总表";
+	protected final static String COMBOVALUE3 = "尾随佣金汇总表LOF";
 	protected final static String COMBOVALUE4 = "尾随佣金汇总表_比例";
 	protected final static String COMBOVALUE5 = "直销手续费明细";
 	protected final static String COMBOVALUE6 = "专户基金费用表";
-	protected final static String COMBOVALUE7 = "尾随佣金汇总表_LOF";
+	protected final static String COMBOVALUE7 = "尾随佣金汇总表";
 	
 	/**
 	 * namemap
@@ -123,7 +123,7 @@ public class AbstractStart extends javax.swing.JFrame implements  ActionListener
 				{
 					ComboBoxModel jComboBox1Model = 
 						new DefaultComboBoxModel(
-								new String[] { COMBOVALUE1, COMBOVALUE2, COMBOVALUE3, COMBOVALUE4, COMBOVALUE5, COMBOVALUE6, COMBOVALUE7 });
+								new String[] { COMBOVALUE1, COMBOVALUE2, COMBOVALUE3, COMBOVALUE5, COMBOVALUE6, COMBOVALUE7 });
 					jComboBox = new JComboBox();
 					jComboBox.setModel(jComboBox1Model);
 					jComboBox.setBounds(6, 4, 108, 24);

@@ -26,7 +26,7 @@ import com.citsamex.core.util.ExcelUtil;
 import com.citsamex.core.vo.VoucherEntryVO;
 
 /**
- * COMBOVALUE3 = "尾随佣金汇总表";
+ * COMBOVALUE3 = "尾随佣金汇总表LOF";
  * @author fans.fan
  *
  */
